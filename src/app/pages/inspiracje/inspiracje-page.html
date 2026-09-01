@@ -1,1 +1,19 @@
 <h2 class="text-2xl font-semibold">Inspiracje</h2>
+<p class="mt-2 max-w-2xl text-sm text-atrament-slaby">
+  Lista nie jest zamknięta ani obowiązkowa. To punkt wyjścia — liczbę punktów za
+  osiągnięcie ustalają zastępowi między sobą.
+</p>
+
+@for (kategoria of store.inspiracje(); track kategoria.id) {
+  <section class="mt-10">
+    <h3 class="font-naglowek text-lg">{{ kategoria.nazwa }}</h3>
+    <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+      @for (inspiracja of kategoria.inspiracje; track inspiracja.tytul) {
+        <li class="rounded-lg border border-warstwica p-4">
+          <p class="font-medium">{{ inspiracja.tytul }}</p>
+          <p class="mt-1 text-sm text-atrament-slaby">{{ inspiracja.opis }}</p>
+        </li>
+      }
+    </ul>
+  </section>
+}

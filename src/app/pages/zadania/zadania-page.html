@@ -1,1 +1,58 @@
 <h2 class="text-2xl font-semibold">Zadania</h2>
+
+<section class="mt-8">
+  <h3 class="font-naglowek text-lg">Miesiące turnieju</h3>
+  <p class="mt-1 text-sm text-atrament-slaby">
+    Zbiórka spójna z listem miesiąca i trop oparty o przypisany punkt Prawa dają punkty ekstra.
+  </p>
+
+  <ul class="mt-4 space-y-2">
+    @for (miesiac of store.miesiace(); track miesiac.iso) {
+      <li
+        class="rounded-lg border p-4"
+        [attr.data-biezacy]="miesiac.iso === store.aktualnyMiesiac()?.iso ? '' : null"
+        [class.border-sygnal]="miesiac.iso === store.aktualnyMiesiac()?.iso"
+        [class.border-warstwica]="miesiac.iso !== store.aktualnyMiesiac()?.iso"
+      >
+        <p class="font-medium">
+          {{ miesiac.nazwa }}
+          @if (miesiac.iso === store.aktualnyMiesiac()?.iso) {
+            <span class="ml-2 text-xs uppercase tracking-wider text-sygnal">teraz</span>
+          }
+        </p>
+        <p class="mt-1 text-sm">
+          List:
+          @if (miesiac.list) {
+            {{ miesiac.list }}
+          } @else {
+            <span class="text-atrament-slaby">jeszcze nieogłoszony</span>
+          }
+        </p>
+        <p class="text-sm">
+          Punkt Prawa:
+          @if (miesiac.punktPrawa) {
+            {{ miesiac.punktPrawa }}
+          } @else {
+            <span class="text-atrament-slaby">jeszcze nieogłoszony</span>
+          }
+        </p>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="mt-12">
+  <h3 class="font-naglowek text-lg">Baza zadań</h3>
+  <p class="mt-1 text-sm text-atrament-slaby">
+    Wykonanie zadania z tej listy daje punkty ekstra.
+  </p>
+
+  <ul class="mt-4 grid gap-4 sm:grid-cols-2">
+    @for (zadanie of store.zadania(); track zadanie.id) {
+      <li class="rounded-lg border border-warstwica p-4">
+        <p class="font-medium">{{ zadanie.tytul }}</p>
+        <p class="mt-1 text-sm text-atrament-slaby">{{ zadanie.opis }}</p>
+      </li>
+    }
+  </ul>
+</section>

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "obrzedowosc",
+    "nazwa": "Obrzędowość",
+    "inspiracje": [
+      { "tytul": "Nazwa i okrzyk zastępu", "opis": "Wymyślcie własną nazwę, zawołanie i moment, w którym ich używacie." },
+      { "tytul": "Totem zastępu", "opis": "Przedmiot, który wędruje na każdą zbiórkę i biwak i zbiera ślady waszych wypraw." },
+      { "tytul": "Kronika", "opis": "Prowadźcie kronikę zastępu — ręcznie, w zeszycie, z wklejkami." },
+      { "tytul": "Obrzęd przyjęcia", "opis": "Ustalcie, jak przyjmujecie do zastępu nową osobę." }
+    ]
+  },
+  {
+    "id": "wyjscia",
+    "nazwa": "Wyjścia i wyprawy",
+    "inspiracje": [
+      { "tytul": "Biwak zastępu", "opis": "Zorganizujcie własny biwak — od planu, przez zakupy, po sprzątanie." },
+      { "tytul": "Rajd", "opis": "Wystartujcie w rajdzie hufca albo chorągwi." },
+      { "tytul": "Nocna gra terenowa", "opis": "Przygotujcie grę dla innego zastępu i przeprowadźcie ją po zmroku." },
+      { "tytul": "Wyprawa bez telefonu", "opis": "Trasa na mapie papierowej, bez nawigacji." }
+    ]
+  },
+  {
+    "id": "tropy",
+    "nazwa": "Tropy",
+    "inspiracje": [
+      { "tytul": "Trop na punkcie Prawa", "opis": "Zaplanujcie trop wokół punktu Prawa Harcerskiego przypisanego do miesiąca." },
+      { "tytul": "Trop służby", "opis": "Trop, którego efektem jest coś zrobionego dla kogoś spoza drużyny." },
+      { "tytul": "Trop rzemieślniczy", "opis": "Nauczcie się razem konkretnej umiejętności i pokażcie efekt." }
+    ]
+  },
+  {
+    "id": "sluzba",
+    "nazwa": "Służba",
+    "inspiracje": [
+      { "tytul": "Służba w hufcu", "opis": "Obsługa imprezy hufca — warta, kuchnia, punkt gry." },
+      { "tytul": "Służba lokalna", "opis": "Praca na rzecz dzielnicy, schroniska, biblioteki, sąsiadów." }
+    ]
+  },
+  {
+    "id": "zycie-zastepu",
+    "nazwa": "Życie zastępu",
+    "inspiracje": [
+      { "tytul": "Zbiórka prowadzona przez każdego", "opis": "Każda osoba w zastępie prowadzi jedną zbiórkę w kwartale." },
+      { "tytul": "Rada zastępu", "opis": "Regularna rada, na której planujecie kolejny miesiąc." },
+      { "tytul": "Wspólny projekt", "opis": "Coś, co powstaje przez kilka zbiórek i zostaje po was." }
+    ]
+  }
+]

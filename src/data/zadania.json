@@ -1,0 +1,10 @@
+[
+  { "id": "z1", "tytul": "Mapa waszego terenu", "opis": "Narysujcie własną mapę okolicy zbiórek z miejscami, które coś dla was znaczą." },
+  { "id": "z2", "tytul": "Wywiad z instruktorem", "opis": "Nagrajcie albo spiszcie rozmowę z instruktorem z waszego hufca o jego pierwszym zastępie." },
+  { "id": "z3", "tytul": "Zastępowa książka kucharska", "opis": "Zbierzcie i przetestujcie pięć przepisów, które da się zrobić na biwaku." },
+  { "id": "z4", "tytul": "Zbiórka w całości w terenie", "opis": "Przeprowadźcie zbiórkę bez wchodzenia do harcówki, niezależnie od pogody." },
+  { "id": "z5", "tytul": "Godzina bez słów", "opis": "Zrealizujcie zadanie zespołowe, komunikując się wyłącznie bez mowy." },
+  { "id": "z6", "tytul": "Ślad po sobie", "opis": "Zostawcie w hufcu coś, z czego skorzysta inny zastęp — grę, sprzęt, instrukcję." },
+  { "id": "z7", "tytul": "Nocne niebo", "opis": "Rozpoznajcie i udokumentujcie pięć gwiazdozbiorów podczas wyjścia po zmroku." },
+  { "id": "z8", "tytul": "Zastęp w obiektywie", "opis": "Zróbcie serię zdjęć opowiadającą jeden dzień z życia zastępu." }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "przyznawanie",
+    "naglowek": "Jak przyznajemy punkty",
+    "akapity": [
+      "Organizatorzy nie zakładają konkretnej puli punktowanych aktywności. Podczas spotkań zastępowi dzielą się osiągnięciami, które zrealizowali w danym okresie, i wzajemnie przyznają sobie za nie punkty.",
+      "Punkty mogą zostać przyznane za urozmaicenie obrzędowości zastępu, zrealizowanie tropu, zajęcie miejsca na podium podczas rajdu, zorganizowanie biwaku zastępu i wiele innych — warto zajrzeć do listy inspiracji. Ich liczba zależy od decyzji innych zastępowych.",
+      "Takie rozwiązanie dostosowuje turniej do zastępów na zróżnicowanych etapach działalności i odpowiada na naturalne potrzeby różnych jednostek."
+    ]
+  },
+  {
+    "id": "ekstra",
+    "naglowek": "Punkty ekstra",
+    "akapity": [
+      "Zrealizowanie zbiórki zastępu spójnej z tematyką listu z danego miesiąca.",
+      "Realizacja tropu opierającego się o punkt Prawa Harcerskiego przypisany do jednego z miesięcy aktualnie trwającego kwartału.",
+      "Wykonanie zadania z bazy przygotowanej przez organizatorów."
+    ]
+  },
+  {
+    "id": "wylaczenia",
+    "naglowek": "Czego nie punktujemy",
+    "akapity": [
+      "Punkty nie będą przyznawane za zdobywane indywidualnie instrumenty metodyczne, takie jak stopnie, sprawności i wyzwania — chyba że zadanie miesiąca będzie się na nich opierać."
+    ]
+  },
+  {
+    "id": "zastepy",
+    "naglowek": "Dołączanie w trakcie",
+    "akapity": [
+      "Zastęp może dołączyć do turnieju w dowolnym momencie. Pojawia się wtedy w rankingu z zerową liczbą punktów i zbiera je na tych samych zasadach co pozostali."
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "nazwa": "Turniej Zastępów Starszoharcerskich",
+  "organizator": "Namiestnictwo Starszoharcerskie Hufca ZHP Gdynia",
+  "start": "2026-09-19",
+  "koniec": "2027-06-20",
+  "kwartaly": [
+    {
+      "id": "q1",
+      "nazwa": "Kwartał I",
+      "start": "2026-09-19",
+      "koniec": "2026-12-20",
+      "miesiace": [
+        { "iso": "2026-09", "nazwa": "wrzesień", "list": null, "punktPrawa": null },
+        { "iso": "2026-10", "nazwa": "październik", "list": null, "punktPrawa": null },
+        { "iso": "2026-11", "nazwa": "listopad", "list": null, "punktPrawa": null },
+        { "iso": "2026-12", "nazwa": "grudzień", "list": null, "punktPrawa": null }
+      ]
+    },
+    {
+      "id": "q2",
+      "nazwa": "Kwartał II",
+      "start": "2026-12-21",
+      "koniec": "2027-03-20",
+      "miesiace": [
+        { "iso": "2027-01", "nazwa": "styczeń", "list": null, "punktPrawa": null },
+        { "iso": "2027-02", "nazwa": "luty", "list": null, "punktPrawa": null },
+        { "iso": "2027-03", "nazwa": "marzec", "list": null, "punktPrawa": null }
+      ]
+    },
+    {
+      "id": "q3",
+      "nazwa": "Kwartał III",
+      "start": "2027-03-21",
+      "koniec": "2027-06-20",
+      "miesiace": [
+        { "iso": "2027-04", "nazwa": "kwiecień", "list": null, "punktPrawa": null },
+        { "iso": "2027-05", "nazwa": "maj", "list": null, "punktPrawa": null },
+        { "iso": "2027-06", "nazwa": "czerwiec", "list": null, "punktPrawa": null }
+      ]
+    }
+  ]
+}

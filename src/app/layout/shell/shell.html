@@ -1,0 +1,47 @@
+<div class="relative min-h-dvh">
+  <header class="mx-auto w-full max-w-5xl px-5 pt-10 pb-6">
+    <p class="text-xs uppercase tracking-[0.2em] text-atrament-slaby">
+      {{ store.turniej().organizator }}
+    </p>
+    <h1 class="mt-2 text-4xl leading-tight font-semibold sm:text-5xl">
+      {{ store.turniej().nazwa }}
+    </h1>
+
+    <nav aria-label="Sekcje turnieju" class="mt-8 flex flex-wrap gap-x-6 gap-y-2">
+      <a
+        routerLink="/"
+        routerLinkActive="text-sygnal"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        >Ranking</a
+      >
+      <a routerLink="/inspiracje" routerLinkActive="text-sygnal"
+        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        >Inspiracje</a
+      >
+      <a routerLink="/zadania" routerLinkActive="text-sygnal"
+        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        >Zadania</a
+      >
+      <a routerLink="/zasady" routerLinkActive="text-sygnal"
+        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        >Zasady</a
+      >
+      <a routerLink="/nagrody" routerLinkActive="text-sygnal"
+        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        >Nagrody
+        @if (!store.nagrodyDostepne()) {
+          <span class="ml-1 text-xs text-atrament-slaby">wkrótce</span>
+        }
+      </a>
+    </nav>
+  </header>
+
+  <main class="mx-auto w-full max-w-5xl px-5 pb-24">
+    <router-outlet />
+  </main>
+
+  <footer class="mx-auto w-full max-w-5xl px-5 pb-10 text-xs text-atrament-slaby">
+    {{ store.turniej().start }} – {{ store.turniej().koniec }}
+  </footer>
+</div>

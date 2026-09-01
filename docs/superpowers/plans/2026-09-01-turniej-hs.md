@@ -2142,6 +2142,14 @@ git commit -m "feat: build inspiracje, zadania and zasady pages from data"
 - Consumes: `TurniejStore.nagrody()`, `.nagrodyDostepne()` from Task 3; `PustyStan` from Task 6.
 - Produces: nothing later tasks depend on.
 
+**Border-colour classes are mutually exclusive here, deliberately.** A static
+`border-warstwica` plus a conditional `[class.border-zloto]` would put two
+equal-specificity `border-color` utilities on the same element, and stylesheet
+source order — not the condition — would decide the winner. That exact bug has
+already been caught twice in this project, both times as dead CSS a
+class-presence assertion could not see. Bind both classes conditionally so only
+one can ever be present.
+
 - [ ] **Step 1: Write the failing test**
 
 Create `src/app/pages/nagrody/nagrody-page.spec.ts`:
@@ -2249,8 +2257,9 @@ Replace `src/app/pages/nagrody/nagrody-page.html`:
     @for (nagroda of posortowane(); track nagroda.miejsce) {
       <li
         [attr.data-miejsce]="nagroda.miejsce"
-        class="rounded-lg border border-warstwica p-5"
+        class="rounded-lg border p-5"
         [class.border-zloto]="nagroda.miejsce === 1"
+        [class.border-warstwica]="nagroda.miejsce !== 1"
       >
         <p class="font-naglowek text-3xl tabular-nums">{{ nagroda.miejsce }}</p>
         <p class="mt-2 font-medium">{{ nagroda.tytul }}</p>

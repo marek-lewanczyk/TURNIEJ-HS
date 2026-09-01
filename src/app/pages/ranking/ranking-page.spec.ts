@@ -79,6 +79,30 @@ describe('RankingPage', () => {
     expect(fixture.nativeElement.textContent).toContain('8');
   });
 
+  it('announces the selected period and entry count in a polite live region', () => {
+    const fixture = utworz();
+    const region = fixture.nativeElement.querySelector('[aria-live="polite"]') as HTMLElement;
+    expect(region).not.toBeNull();
+    expect(region.textContent).toContain('Cały turniej');
+    expect(region.textContent).toContain('2 wpisy');
+  });
+
+  it('updates the live region text when the period changes', () => {
+    const fixture = utworz();
+    const przyciski = fixture.nativeElement.querySelectorAll('[data-filtr] button');
+    przyciski[1].click();
+    fixture.detectChanges();
+
+    const region = fixture.nativeElement.querySelector('[aria-live="polite"]') as HTMLElement;
+    expect(region.textContent).toContain('Kwartał I');
+    expect(region.textContent).toContain('1 wpis');
+  });
+
+  it('marks the ranking list with list semantics for Safari/VoiceOver', () => {
+    const ol = utworz().nativeElement.querySelector('ol');
+    expect(ol.getAttribute('role')).toBe('list');
+  });
+
   it('explains the empty state when nobody has scored yet', () => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({

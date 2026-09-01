@@ -1,7 +1,7 @@
 <h2 class="sr-only">Ranking zastępów</h2>
 
 <div data-filtr class="mb-8 flex flex-wrap gap-2" role="group" aria-label="Okres">
-  @for (opcja of opcje(); track opcja.etykieta) {
+  @for (opcja of opcje(); track opcja.klucz) {
     <button
       type="button"
       class="rounded-full border border-warstwica px-3 py-1 text-sm"
@@ -15,6 +15,8 @@
   }
 </div>
 
+<p class="sr-only" role="status" aria-live="polite">{{ komunikatOkresu() }}</p>
+
 @if (pustyRanking()) {
   <p class="rounded-lg border border-warstwica bg-papier-cien/40 p-6 text-sm">
     Turniej dopiero się rozkręca — w tym okresie nie ma jeszcze żadnych punktów.
@@ -22,7 +24,7 @@
   </p>
 }
 
-<ol class="list-none">
+<ol class="list-none" role="list">
   @for (pozycja of store.ranking(); track pozycja.zastep.id) {
     <li animate.enter="wjazd-wiersza">
       <app-slupek [pozycja]="pozycja" />

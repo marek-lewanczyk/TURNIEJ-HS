@@ -1,59 +1,94 @@
-# TURNIEJHS
+# Turniej Zastępów Starszoharcerskich
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.6.
+Tablica wyników turnieju organizowanego przez Namiestnictwo Starszoharcerskie
+Hufca ZHP Gdynia, od 19 września 2026 do 20 czerwca 2027.
 
-## Development server
+Strona jest statyczna. Nie ma panelu administracyjnego — wszystkie dane to pliki
+JSON w `src/data/`, a publikacja odbywa się przez push na `main`.
 
-To start a local development server, run:
+## Jak dopisać punkty
 
-```bash
-ng serve
+Dodaj obiekt na końcu tablicy w `src/data/punkty.json`:
+
+```json
+{
+  "id": "2026-10-12-aptus-biwak",
+  "data": "2026-10-12",
+  "zastepId": "aptus",
+  "tytul": "Biwak zastępu w Kolibkach",
+  "opis": "Dwa dni, własna kuchnia, gra nocna.",
+  "punkty": 12,
+  "kategoria": "biwak",
+  "ekstra": "zadanie-bazy"
+}
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- `id` — dowolny, byle unikalny. Wygodna konwencja: `data-zastęp-skrót`.
+- `zastepId` — musi istnieć w `zastepy.json`.
+- `kategoria` — jedna z: `obrzedowosc`, `trop`, `rajd`, `biwak`, `zbiorka`, `sluzba`, `inne`.
+- `ekstra` — pomiń, jeśli to zwykłe punkty. W przeciwnym razie: `list-miesiaca`,
+  `punkt-prawa` albo `zadanie-bazy`.
+- `punkty` — liczba całkowita, może być ujemna.
 
-## Code scaffolding
+## Jak dopisać zastęp
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Dodaj obiekt do `src/data/zastepy.json`:
 
-```bash
-ng generate component component-name
+```json
+{ "id": "borealis", "nazwa": "Borealis", "barwa": "zloto", "dolaczyl": "2027-01-10" }
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Zastęp pojawi się w rankingu od razu, z zerem punktów.
 
-```bash
-ng generate --help
+## Jak ogłosić list miesiąca albo punkt Prawa
+
+W `src/data/turniej.json` znajdź miesiąc i zamień `null` na treść:
+
+```json
+{ "iso": "2026-10", "nazwa": "październik", "list": "O odwadze", "punktPrawa": "Punkt 3" }
 ```
 
-## Building
+## Jak ogłosić nagrody
 
-To build the project run:
+Wypełnij `src/data/nagrody.json`. Dopóki tablica jest pusta, zakładka pokazuje
+stan „Wkrótce".
 
-```bash
-ng build
+```json
+[
+  { "miejsce": 1, "tytul": "Wyprawa w Bieszczady", "opis": "Dla całego zastępu" },
+  { "miejsce": 2, "tytul": "Sprzęt biwakowy" },
+  { "miejsce": 3, "tytul": "Zestaw map i kompas" }
+]
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Publikacja
 
 ```bash
-ng test
+git add src/data
+git commit -m "data: add October points"
+git push
 ```
 
-## Running end-to-end tests
+GitHub Actions sprawdza typy, uruchamia testy, buduje i publikuje na GitHub Pages.
+Literówka w danych zatrzymuje deploy na teście `walidacja.spec.ts` — strona zostaje
+na poprzedniej, poprawnej wersji.
 
-For end-to-end (e2e) testing, run:
+Workflow (`.github/workflows/deploy.yml`) buduje z `--base-href /TURNIEJ-HS/` —
+musi się zgadzać z nazwą repozytorium na GitHub. Jeśli repozytorium nazywa się
+inaczej niż `TURNIEJ-HS`, zmień `--base-href` w workflow na `/nazwa-repo/`. Dla
+strony typu `<user>.github.io` albo własnej domeny powinno być `/`.
+
+## Praca lokalna
 
 ```bash
-ng e2e
+npm install
+npm start              # http://localhost:4200
+npm run type-check
+npx ng test --watch=false
+npx ng build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Dokumentacja projektu
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Design: `docs/superpowers/specs/2026-09-01-turniej-hs-design.md`
+- Plan wdrożenia: `docs/superpowers/plans/2026-09-01-turniej-hs.md`

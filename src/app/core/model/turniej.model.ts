@@ -67,6 +67,12 @@ export interface Zastep {
  * `--color-` prefix. `Zastep.barwa` is checked against this list in
  * `walidacja.ts` and rendered from it in `slupek.ts` — kept in one place so
  * adding a token to the theme never means editing two lists.
+ *
+ * `turniej.model.spec.ts` asserts this list against a literal mirror of
+ * theme.css's tokens (reading theme.css itself from a spec isn't possible
+ * without a new dependency — see that spec's file-level comment). Update
+ * both this list and that mirror together when theme.css's `--color-*`
+ * tokens change.
  */
 export const TOKENY_BARW: readonly string[] = [
   'papier',

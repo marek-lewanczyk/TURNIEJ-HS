@@ -65,6 +65,35 @@ export function waliduj(dane: DaneTurnieju): string[] {
     if (!TOKENY_BARW.includes(zastep.barwa)) {
       bledy.push(`zastęp ${etykieta}: nieznana barwa "${zastep.barwa}"`);
     }
+
+    if (!dataPoprawna(zastep.dolaczyl)) {
+      bledy.push(`zastęp ${etykieta}: nieprawidłowa data dołączenia "${zastep.dolaczyl}"`);
+    }
+  }
+
+  // Guards the quarter overlap/coverage checks below: they compare and walk these
+  // dates (including `nastepnyDzien`, which throws on anything `dataPoprawna` would
+  // reject) and must never run over a malformed date.
+  let turniejDatyPoprawne = true;
+  if (!dataPoprawna(turniej.start)) {
+    bledy.push(`turniej: nieprawidłowa data startu "${turniej.start}"`);
+    turniejDatyPoprawne = false;
+  }
+  if (!dataPoprawna(turniej.koniec)) {
+    bledy.push(`turniej: nieprawidłowa data końca "${turniej.koniec}"`);
+    turniejDatyPoprawne = false;
+  }
+
+  let kwartalyDatyPoprawne = true;
+  for (const kwartal of turniej.kwartaly) {
+    if (!dataPoprawna(kwartal.start)) {
+      bledy.push(`kwartał ${kwartal.id}: nieprawidłowa data startu "${kwartal.start}"`);
+      kwartalyDatyPoprawne = false;
+    }
+    if (!dataPoprawna(kwartal.koniec)) {
+      bledy.push(`kwartał ${kwartal.id}: nieprawidłowa data końca "${kwartal.koniec}"`);
+      kwartalyDatyPoprawne = false;
+    }
   }
 
   const idWpisow = new Set<string>();
@@ -107,41 +136,43 @@ export function waliduj(dane: DaneTurnieju): string[] {
     }
   }
 
-  for (let i = 0; i < turniej.kwartaly.length; i++) {
-    const kwartal = turniej.kwartaly[i];
-    if (kwartal.start < turniej.start || kwartal.koniec > turniej.koniec) {
-      bledy.push(`kwartał ${kwartal.id}: poza okresem turnieju`);
-    }
-    if (kwartal.start > kwartal.koniec) {
-      bledy.push(`kwartał ${kwartal.id}: koniec przed startem`);
-    }
-    for (let j = 0; j < i; j++) {
-      if (zachodza(kwartal, turniej.kwartaly[j])) {
-        bledy.push(`kwartał ${kwartal.id}: zachodzi na kwartał ${turniej.kwartaly[j].id}`);
+  if (turniejDatyPoprawne && kwartalyDatyPoprawne) {
+    for (let i = 0; i < turniej.kwartaly.length; i++) {
+      const kwartal = turniej.kwartaly[i];
+      if (kwartal.start < turniej.start || kwartal.koniec > turniej.koniec) {
+        bledy.push(`kwartał ${kwartal.id}: poza okresem turnieju`);
+      }
+      if (kwartal.start > kwartal.koniec) {
+        bledy.push(`kwartał ${kwartal.id}: koniec przed startem`);
+      }
+      for (let j = 0; j < i; j++) {
+        if (zachodza(kwartal, turniej.kwartaly[j])) {
+          bledy.push(`kwartał ${kwartal.id}: zachodzi na kwartał ${turniej.kwartaly[j].id}`);
+        }
       }
     }
-  }
 
-  if (turniej.kwartaly.length > 0) {
-    const posortowane = [...turniej.kwartaly].sort((a, b) => a.start.localeCompare(b.start));
-    const pierwszy = posortowane[0];
-    const ostatni = posortowane[posortowane.length - 1];
+    if (turniej.kwartaly.length > 0) {
+      const posortowane = [...turniej.kwartaly].sort((a, b) => a.start.localeCompare(b.start));
+      const pierwszy = posortowane[0];
+      const ostatni = posortowane[posortowane.length - 1];
 
-    if (pierwszy.start !== turniej.start) {
-      bledy.push(
-        `kwartały: luka w pokryciu turnieju przed pierwszym kwartałem (zaczyna się ${pierwszy.start}, turniej ${turniej.start})`,
-      );
-    }
-    if (ostatni.koniec !== turniej.koniec) {
-      bledy.push(
-        `kwartały: luka w pokryciu turnieju po ostatnim kwartale (kończy się ${ostatni.koniec}, turniej ${turniej.koniec})`,
-      );
-    }
-    for (let i = 0; i < posortowane.length - 1; i++) {
-      const a = posortowane[i];
-      const b = posortowane[i + 1];
-      if (nastepnyDzien(a.koniec) !== b.start) {
-        bledy.push(`kwartały: luka w pokryciu turnieju między ${a.id} a ${b.id}`);
+      if (pierwszy.start !== turniej.start) {
+        bledy.push(
+          `kwartały: luka w pokryciu turnieju przed pierwszym kwartałem (zaczyna się ${pierwszy.start}, turniej ${turniej.start})`,
+        );
+      }
+      if (ostatni.koniec !== turniej.koniec) {
+        bledy.push(
+          `kwartały: luka w pokryciu turnieju po ostatnim kwartale (kończy się ${ostatni.koniec}, turniej ${turniej.koniec})`,
+        );
+      }
+      for (let i = 0; i < posortowane.length - 1; i++) {
+        const a = posortowane[i];
+        const b = posortowane[i + 1];
+        if (nastepnyDzien(a.koniec) !== b.start) {
+          bledy.push(`kwartały: luka w pokryciu turnieju między ${a.id} a ${b.id}`);
+        }
       }
     }
   }

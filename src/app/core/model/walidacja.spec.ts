@@ -211,4 +211,70 @@ describe('waliduj', () => {
   it('accepts the real data shipped in src/data', () => {
     expect(waliduj(DANE)).toEqual([]);
   });
+
+  it('rejects a tournament with a malformed start date instead of throwing', () => {
+    const dane = bazoweDane();
+    dane.turniej.start = '2026-13-45';
+    expect(() => waliduj(dane)).not.toThrow();
+    expect(waliduj(dane)).toContain('turniej: nieprawidłowa data startu "2026-13-45"');
+  });
+
+  it('rejects a tournament with a malformed end date instead of throwing', () => {
+    const dane = bazoweDane();
+    dane.turniej.koniec = '2026-13-45';
+    expect(() => waliduj(dane)).not.toThrow();
+    expect(waliduj(dane)).toContain('turniej: nieprawidłowa data końca "2026-13-45"');
+  });
+
+  it('rejects a tournament with a missing end date instead of throwing', () => {
+    const dane = bazoweDane();
+    (dane.turniej as { koniec?: string }).koniec = undefined;
+    expect(() => waliduj(dane)).not.toThrow();
+    expect(waliduj(dane)).toContain('turniej: nieprawidłowa data końca "undefined"');
+  });
+
+  it('rejects a patrol with a malformed join date instead of throwing', () => {
+    const dane = bazoweDane();
+    dane.zastepy[0].dolaczyl = '2026-02-30';
+    expect(() => waliduj(dane)).not.toThrow();
+    expect(waliduj(dane)).toContain('zastęp aptus: nieprawidłowa data dołączenia "2026-02-30"');
+  });
+
+  it('rejects a quarter with a malformed start date instead of throwing', () => {
+    const dane = bazoweDane();
+    dane.turniej.kwartaly[0].start = '2026-13-45';
+    expect(() => waliduj(dane)).not.toThrow();
+    expect(waliduj(dane)).toContain('kwartał q1: nieprawidłowa data startu "2026-13-45"');
+  });
+
+  it('rejects a quarter with a malformed end date and skips the overlap/coverage checks without throwing', () => {
+    // The case that throws today: two quarters, with the malformed `koniec` on the
+    // non-last one, so the coverage-gap walk would reach `nastepnyDzien` on it.
+    const dane = bazoweDane();
+    dane.turniej.koniec = '2027-06-20';
+    dane.turniej.kwartaly[0].koniec = '2026-13-45';
+    dane.turniej.kwartaly.push({
+      id: 'q2',
+      nazwa: 'Drugi',
+      start: '2026-12-01',
+      koniec: '2027-06-20',
+      miesiace: [],
+    });
+
+    expect(() => waliduj(dane)).not.toThrow();
+    const bledy = waliduj(dane);
+    expect(bledy).toContain('kwartał q1: nieprawidłowa data końca "2026-13-45"');
+    expect(bledy.some((b) => b.startsWith('kwartały: luka w pokryciu'))).toBe(false);
+    expect(bledy.some((b) => b.includes('zachodzi na kwartał'))).toBe(false);
+    expect(bledy.some((b) => b.includes('poza okresem turnieju') && b.startsWith('kwartał'))).toBe(
+      false,
+    );
+  });
+
+  it('rejects a quarter with a missing end date instead of throwing', () => {
+    const dane = bazoweDane();
+    (dane.turniej.kwartaly[0] as { koniec?: string }).koniec = undefined;
+    expect(() => waliduj(dane)).not.toThrow();
+    expect(waliduj(dane)).toContain('kwartał q1: nieprawidłowa data końca "undefined"');
+  });
 });

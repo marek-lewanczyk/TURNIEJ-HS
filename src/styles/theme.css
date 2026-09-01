@@ -1,4 +1,10 @@
-@theme {
+/* `static`: Tailwind only emits a `@theme` token into the built CSS when it finds a
+   scanned-source reference to it. Every token here is consumed exclusively via the
+   dynamic `var(--color-' + barwa + ')'` binding in slupek.ts, which the scanner cannot
+   see — so without `static` a token can silently stop being emitted (falling back to
+   `transparent` at computed-value time) the moment its last literal-class reference is
+   removed, with no build error. `static` forces unconditional emission. Do not remove. */
+@theme static {
   /* Paper-and-map palette. Light only by design — see spec section 12. */
   --color-papier: oklch(0.97 0.012 85);
   --color-papier-cien: oklch(0.93 0.016 85);

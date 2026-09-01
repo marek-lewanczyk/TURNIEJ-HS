@@ -55,7 +55,15 @@ export class Teren {
     }
     try {
       const probne = document.createElement('canvas');
-      return probne.getContext('webgl2') !== null;
+      const kontekst = probne.getContext('webgl2');
+      if (!kontekst) {
+        return false;
+      }
+      // This probe context is never rendered to and never disposed by anyone
+      // else — release it explicitly instead of letting the canvas (and its
+      // GPU-side context) sit around until GC gets to it.
+      kontekst.getExtension('WEBGL_lose_context')?.loseContext();
+      return true;
     } catch {
       return false;
     }
@@ -69,6 +77,19 @@ export class Teren {
 
     const spokojnie = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Belt-and-suspenders alongside the try/catch below: three.js's own
+    // constructor already throws when context creation fails outright, but
+    // a browser can also fire this event as a non-fatal warning while still
+    // handing back a (degraded) context, in which case the constructor would
+    // not throw at all. Catch that case too before building anything on it.
+    let bladTworzeniaKontekstu = false;
+    const naBladTworzeniaKontekstu = () => {
+      bladTworzeniaKontekstu = true;
+    };
+    canvas.addEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu, {
+      once: true,
+    });
+
     let renderer: WebGLRenderer;
     try {
       renderer = new WebGLRenderer({
@@ -78,7 +99,16 @@ export class Teren {
         powerPreference: 'low-power',
       });
     } catch {
+      canvas.removeEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu);
       this.dziala.set(false);
+      return;
+    }
+
+    if (bladTworzeniaKontekstu) {
+      canvas.removeEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu);
+      this.dziala.set(false);
+      renderer.forceContextLoss();
+      renderer.dispose();
       return;
     }
 
@@ -163,7 +193,7 @@ export class Teren {
     const klatka = () => {
       material.uniforms['uCzas'].value = (performance.now() - start) / 1000;
       renderer.render(scene, camera);
-      if (widoczny && !spokojnie && document.visibilityState === 'visible') {
+      if (this.dziala() && widoczny && !spokojnie && document.visibilityState === 'visible') {
         uchwyt = requestAnimationFrame(klatka);
       } else {
         uchwyt = 0;
@@ -171,7 +201,13 @@ export class Teren {
     };
 
     const wznow = () => {
-      if (!uchwyt && widoczny && !spokojnie && document.visibilityState === 'visible') {
+      if (
+        !uchwyt &&
+        this.dziala() &&
+        widoczny &&
+        !spokojnie &&
+        document.visibilityState === 'visible'
+      ) {
         uchwyt = requestAnimationFrame(klatka);
       }
     };
@@ -193,11 +229,15 @@ export class Teren {
     addEventListener('resize', naResize);
     document.addEventListener('visibilitychange', naWidocznosc);
 
-    // One frame always renders, even under prefers-reduced-motion.
-    renderer.render(scene, camera);
-    wznow();
-
-    this.destroyRef.onDestroy(() => {
+    // Idempotent: may run once from `onShaderError` below and again from
+    // `destroyRef.onDestroy`, or the other way around if the component is
+    // torn down first and a queued shader-error callback fires afterwards.
+    let posprzatane = false;
+    const sprzataj = () => {
+      if (posprzatane) {
+        return;
+      }
+      posprzatane = true;
       cancelAnimationFrame(uchwyt);
       obserwator.disconnect();
       removeEventListener('pointermove', naKursor);
@@ -210,8 +250,29 @@ export class Teren {
           obiekt.geometry.dispose();
         }
       });
+      renderer.forceContextLoss();
       renderer.dispose();
-    });
+    };
+
+    // three.js does not throw when a shader fails to compile/link — it logs
+    // to the console and silently continues, which with `alpha: false` and
+    // the default clear colour paints an opaque black frame over the whole
+    // page (this element sits at `-z-10` but still covers the body
+    // background). Assigning this hook is the only way to be told about it;
+    // it fires synchronously the first time the broken program is used,
+    // i.e. from inside the very first `renderer.render(...)` call below.
+    // Disposal is deferred to a microtask so we never dispose the renderer
+    // while still inside its own render() call.
+    renderer.debug.onShaderError = () => {
+      this.dziala.set(false);
+      queueMicrotask(sprzataj);
+    };
+
+    // One frame always renders, even under prefers-reduced-motion.
+    renderer.render(scene, camera);
+    wznow();
+
+    this.destroyRef.onDestroy(sprzataj);
   }
 
   /** Deterministic scatter — same patrol always lands on the same spot. */

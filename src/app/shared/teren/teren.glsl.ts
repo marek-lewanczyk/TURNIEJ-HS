@@ -83,5 +83,9 @@ export const FRAGMENT_SHADER = /* glsl */ `
     }
 
     gl_FragColor = vec4(kolor, 1.0);
+    // uKolorTla/uKolorLinii/uKolorAkcentu are supplied as linear-sRGB (three.js's
+    // working colour space); without this, the drawing buffer receives them
+    // un-encoded and every colour renders too dark.
+    #include <colorspace_fragment>
   }
 `;

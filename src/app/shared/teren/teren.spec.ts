@@ -47,4 +47,16 @@ describe('Teren', () => {
     const fixture = utworz();
     expect(() => fixture.destroy()).not.toThrow();
   });
+
+  it('falls back to the gradient when the WebGL renderer constructor throws', () => {
+    // A context object with none of the real WebGL2 API on it: `dziala`
+    // starts true (this is what `webglDostepny()` sees), but the real
+    // `WebGLRenderer` constructor throws as soon as it tries to query
+    // capabilities/extensions on this bogus context — the untested half of
+    // the non-negotiable (dziala starts true, constructor throws, dziala
+    // flips back to false and the gradient renders).
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({} as never);
+    const fixture = utworz();
+    expect(fixture.nativeElement.querySelector('[data-fallback]')).not.toBeNull();
+  });
 });

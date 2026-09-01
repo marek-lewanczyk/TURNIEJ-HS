@@ -23,8 +23,15 @@ Dodaj obiekt na końcu tablicy w `src/data/punkty.json`:
 }
 ```
 
-- `id` — dowolny, byle unikalny. Wygodna konwencja: `data-zastęp-skrót`.
+Wszystkie pola poza `opis` i `ekstra` są wymagane — brak któregokolwiek albo pusty
+tekst zatrzymuje deploy na `walidacja.spec.ts` zamiast wejść na produkcję jako
+puste miejsce w rankingu.
+
+- `id` — dowolny, byle unikalny i niepusty. Wygodna konwencja: `data-zastęp-skrót`.
+- `data` — data przyznania punktów, format ISO `RRRR-MM-DD` (np. `2026-10-12`),
+  w obrębie trwania turnieju: od `2026-09-19` do `2027-06-20` włącznie.
 - `zastepId` — musi istnieć w `zastepy.json`.
+- `tytul` — krótki tytuł osiągnięcia, niepusty.
 - `kategoria` — jedna z: `obrzedowosc`, `trop`, `rajd`, `biwak`, `zbiorka`, `sluzba`, `inne`.
 - `ekstra` — pomiń, jeśli to zwykłe punkty. W przeciwnym razie: `list-miesiaca`,
   `punkt-prawa` albo `zadanie-bazy`.
@@ -37,6 +44,16 @@ Dodaj obiekt do `src/data/zastepy.json`:
 ```json
 { "id": "borealis", "nazwa": "Borealis", "barwa": "zloto", "dolaczyl": "2027-01-10" }
 ```
+
+- `id`, `nazwa` — wymagane, niepuste.
+- `barwa` — token koloru z motywu (`src/styles/theme.css`), bez przedrostka
+  `--color-`. Dozwolone wartości: `papier`, `papier-cien`, `atrament`,
+  `atrament-slaby`, `warstwica`, `las`, `las-jasny`, `sygnal`, `zloto`. Inna
+  wartość zatrzymuje deploy na teście walidacji zamiast dać niewidzialny,
+  przezroczysty słupek na stronie.
+- `dolaczyl` — data ISO, kiedy zastęp wszedł do turnieju. Jeśli zastęp gra od
+  początku, wpisz datę startu turnieju (`2026-09-19`) — to jedyna wartość, przy
+  której strona nie pokazuje dodatkowej informacji o dołączeniu w trakcie.
 
 Zastęp pojawi się w rankingu od razu, z zerem punktów.
 
@@ -61,6 +78,9 @@ stan „Wkrótce".
 ]
 ```
 
+`miejsce` musi być `1`, `2` albo `3`, każde najwyżej raz — inna wartość albo
+duplikat zatrzymuje deploy na teście walidacji.
+
 ## Publikacja
 
 ```bash
@@ -77,6 +97,14 @@ Workflow (`.github/workflows/deploy.yml`) buduje z `--base-href /TURNIEJ-HS/` �
 musi się zgadzać z nazwą repozytorium na GitHub. Jeśli repozytorium nazywa się
 inaczej niż `TURNIEJ-HS`, zmień `--base-href` w workflow na `/nazwa-repo/`. Dla
 strony typu `<user>.github.io` albo własnej domeny powinno być `/`.
+
+### Włączenie GitHub Pages (jednorazowo, przed pierwszym pushem)
+
+Zanim workflow zadziała, repozytorium musi mieć włączone publikowanie przez
+Actions: **Settings → Pages → Source: „GitHub Actions"**. Bez tego kroku
+pierwszy deploy kończy się błędem uprawnień, który nic nie mówi osobie bez
+doświadczenia programistycznego — jeśli tak się stanie, to jest dokładnie ten
+brakujący krok.
 
 ## Praca lokalna
 

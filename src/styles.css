@@ -2,17 +2,21 @@
 @import './styles/theme.css';
 
 /* Local fonts. If the woff2 files are absent the family stack in @theme
-   degrades to the system serif/sans — the build never breaks over them. */
+   degrades to the system serif/sans — the build never breaks over them.
+   Paths are relative to this stylesheet, not the document root: CSS `url()`
+   ignores `<base href>`, so under a subpath deploy (GitHub Pages project
+   site, `/TURNIEJ-HS/`) an absolute `/fonts/…` would resolve to the origin
+   root and 404. */
 @font-face {
   font-family: 'Fraunces';
-  src: url('/fonts/fraunces-variable.woff2') format('woff2-variations');
+  src: url('../public/fonts/fraunces-variable.woff2') format('woff2-variations');
   font-weight: 300 900;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+  src: url('../public/fonts/inter-variable.woff2') format('woff2-variations');
   font-weight: 100 900;
   font-display: swap;
 }

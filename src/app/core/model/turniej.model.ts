@@ -56,11 +56,29 @@ export interface Turniej {
 export interface Zastep {
   id: string;
   nazwa: string;
-  /** Theme token name without the `--color-` prefix, e.g. `las`. */
+  /** Theme token name without the `--color-` prefix, e.g. `las`. Must be one of {@link TOKENY_BARW}. */
   barwa: string;
   /** ISO date the patrol entered the tournament. */
   dolaczyl: string;
 }
+
+/**
+ * Colour tokens defined in `src/styles/theme.css` (`--color-*`), minus the
+ * `--color-` prefix. `Zastep.barwa` is checked against this list in
+ * `walidacja.ts` and rendered from it in `slupek.ts` — kept in one place so
+ * adding a token to the theme never means editing two lists.
+ */
+export const TOKENY_BARW: readonly string[] = [
+  'papier',
+  'papier-cien',
+  'atrament',
+  'atrament-slaby',
+  'warstwica',
+  'las',
+  'las-jasny',
+  'sygnal',
+  'zloto',
+];
 
 export interface Wpis {
   id: string;

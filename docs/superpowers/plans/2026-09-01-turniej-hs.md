@@ -847,8 +847,8 @@ describe('TurniejStore', () => {
   it('sums points per patrol and sorts descending', () => {
     const store = utworz();
     expect(store.ranking().map((p) => [p.zastep.id, p.suma])).toEqual([
-      ['cirrus', 12],
       ['aptus', 15],
+      ['cirrus', 12],
       ['nowy', 0],
     ]);
   });
@@ -1093,7 +1093,7 @@ and delete the now-unused `import { DANE } from './dane';`.
 - [ ] **Step 6: Run the tests to verify they pass**
 
 Run: `npx ng test --watch=false`
-Expected: PASS. The first test asserts `[['cirrus', 12], ['aptus', 15], ['nowy', 0]]` — that ordering is wrong on purpose. It must fail. Fix the expectation to `[['aptus', 15], ['cirrus', 12], ['nowy', 0]]`, rerun, and confirm every test passes. This step exists because a sort assertion that was never seen failing proves nothing.
+Expected: PASS, 11 tests in `turniej-store.spec.ts`. If the sort test fails, the comparator is wrong — fix `turniej-store.ts`, never the expectation.
 
 - [ ] **Step 7: Commit**
 
@@ -1145,6 +1145,12 @@ function utworz(dane: DaneTurnieju) {
   return fixture;
 }
 
+/** The "wkrótce" marker sits in a nested span, so textContent carries the
+ *  template's indentation. Collapse it before comparing. */
+function tekst(element: Element): string {
+  return (element.textContent ?? '').replace(/\s+/g, ' ').trim();
+}
+
 describe('Shell', () => {
   beforeEach(() => TestBed.resetTestingModule());
 
@@ -1156,7 +1162,7 @@ describe('Shell', () => {
 
   it('renders all five tabs', () => {
     const linki = utworz(DANE).nativeElement.querySelectorAll('nav a');
-    expect([...linki].map((a: Element) => a.textContent?.trim())).toEqual([
+    expect([...linki].map((a: Element) => tekst(a))).toEqual([
       'Ranking',
       'Inspiracje',
       'Zadania',
@@ -1168,7 +1174,7 @@ describe('Shell', () => {
   it('drops the "wkrótce" marker once prizes exist', () => {
     const dane: DaneTurnieju = { ...DANE, nagrody: [{ miejsce: 1, tytul: 'Wyprawa' }] };
     const linki = utworz(dane).nativeElement.querySelectorAll('nav a');
-    expect(linki[4].textContent?.trim()).toBe('Nagrody');
+    expect(tekst(linki[4])).toBe('Nagrody');
   });
 });
 ```

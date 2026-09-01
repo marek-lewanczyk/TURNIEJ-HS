@@ -1,7 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it, beforeEach } from 'vitest';
 import { Slupek } from './slupek';
-import type { PozycjaRankingu } from '../../core/turniej-store';
+import { DANE_TOKEN, type PozycjaRankingu } from '../../core/turniej-store';
+import type { DaneTurnieju } from '../../core/model/turniej.model';
+
+const DANE_TESTOWE: DaneTurnieju = {
+  turniej: {
+    nazwa: 'T',
+    organizator: 'O',
+    start: '2026-09-19',
+    koniec: '2027-06-20',
+    kwartaly: [],
+  },
+  zastepy: [],
+  wpisy: [],
+  inspiracje: [],
+  zadania: [],
+  zasady: [],
+  nagrody: [],
+};
 
 const POZYCJA: PozycjaRankingu = {
   zastep: { id: 'aptus', nazwa: 'Aptus', barwa: 'las', dolaczyl: '2026-09-19' },
@@ -21,8 +38,10 @@ const POZYCJA: PozycjaRankingu = {
   procentLidera: 100,
 };
 
-function utworz(pozycja: PozycjaRankingu) {
-  TestBed.configureTestingModule({});
+function utworz(pozycja: PozycjaRankingu, dane: DaneTurnieju = DANE_TESTOWE) {
+  TestBed.configureTestingModule({
+    providers: [{ provide: DANE_TOKEN, useValue: dane }],
+  });
   const fixture = TestBed.createComponent(Slupek);
   fixture.componentRef.setInput('pozycja', pozycja);
   fixture.detectChanges();
@@ -59,6 +78,53 @@ describe('Slupek', () => {
     const tekst = utworz({ ...POZYCJA, wpisy: [], suma: 0, procentLidera: 0 }).nativeElement
       .textContent as string;
     expect(tekst).toContain('Brak wpisów w tym okresie');
+  });
+
+  it('renders a category pill next to the entry title', () => {
+    const tekst = utworz(POZYCJA).nativeElement.textContent as string;
+    expect(tekst).toContain('biwak');
+  });
+
+  it('binds the bar colour to the patrol token, never a hardcoded class', () => {
+    const fixture = utworz(POZYCJA);
+    const belka = fixture.nativeElement.querySelector('[data-belka]') as HTMLElement;
+    expect(belka.style.backgroundColor).toBe('var(--color-las)');
+    expect(belka.className).not.toContain('bg-las');
+  });
+
+  it('says nothing about joining when dolaczyl equals the tournament start', () => {
+    const tekst = utworz(POZYCJA).nativeElement.textContent as string;
+    expect(tekst).not.toContain('Dołączył do turnieju');
+  });
+
+  it('says so when the patrol joined mid-tournament', () => {
+    const pozycja: PozycjaRankingu = {
+      ...POZYCJA,
+      zastep: { ...POZYCJA.zastep, dolaczyl: '2027-01-10' },
+    };
+    const tekst = utworz(pozycja).nativeElement.textContent as string;
+    expect(tekst).toContain('Dołączył do turnieju 2027-01-10');
+  });
+
+  it('renders a chevron disclosure affordance', () => {
+    const chevron = utworz(POZYCJA).nativeElement.querySelector('.chevron');
+    expect(chevron).not.toBeNull();
+    expect(chevron.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  // jsdom does not evaluate the `details[open]` cascade the way a real
+  // browser does, so the actual rotation can only be verified in a real
+  // browser (see the fix report). This is a regression guard against the
+  // rule being deleted or reverted back to a Tailwind group-open utility —
+  // verified in a real browser check not to animate this SVG icon.
+  it('carries the open-state rotation rule for the chevron', () => {
+    const style = (Slupek as unknown as { ɵcmp: { styles: string[] } }).ɵcmp.styles.join('\n');
+    const blokOtwarcia = style.match(
+      /details\[open\](?:\[[^\]]*\])?\s*\.chevron(?:\[[^\]]*\])?\s*{([^}]*)}/,
+    );
+    expect(blokOtwarcia).not.toBeNull();
+    const [, deklaracje] = blokOtwarcia as RegExpMatchArray;
+    expect(deklaracje).toContain('transform: rotate(90deg)');
   });
 
   // jsdom does not evaluate `prefers-reduced-motion` media queries or

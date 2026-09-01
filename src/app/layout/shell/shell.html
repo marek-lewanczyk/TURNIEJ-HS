@@ -1,4 +1,10 @@
 <div class="relative min-h-dvh">
+  @defer (on viewport) {
+    <app-teren />
+  } @placeholder {
+    <div class="pointer-events-none fixed inset-0 -z-10" aria-hidden="true"></div>
+  }
+
   <header class="mx-auto w-full max-w-5xl px-5 pt-10 pb-6">
     <p class="text-xs uppercase tracking-[0.2em] text-atrament-slaby">
       {{ store.turniej().organizator }}

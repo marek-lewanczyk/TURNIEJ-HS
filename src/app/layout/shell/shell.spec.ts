@@ -7,10 +7,17 @@ import { DANE } from '../../core/dane';
 import { routes } from '../../app.routes';
 import type { DaneTurnieju } from '../../core/model/turniej.model';
 
-function utworz(dane: DaneTurnieju) {
+async function utworz(dane: DaneTurnieju) {
   TestBed.configureTestingModule({
+    // Listing Shell under `imports` (rather than only passing it to
+    // `createComponent`) is what makes TestBed register its deferred
+    // `<app-teren />` dependency so `compileComponents()` can resolve it.
+    imports: [Shell],
     providers: [provideRouter([]), { provide: DANE_TOKEN, useValue: dane }],
   });
+  // The shell now defers `<app-teren />`, an async-resolved dependency, so
+  // TestBed needs to compile components before creating one synchronously.
+  await TestBed.compileComponents();
   const fixture = TestBed.createComponent(Shell);
   fixture.detectChanges();
   return fixture;
@@ -25,14 +32,14 @@ function tekst(element: Element): string {
 describe('Shell', () => {
   beforeEach(() => TestBed.resetTestingModule());
 
-  it('shows the tournament name and organiser', () => {
-    const tekst = utworz(DANE).nativeElement.textContent as string;
+  it('shows the tournament name and organiser', async () => {
+    const tekst = (await utworz(DANE)).nativeElement.textContent as string;
     expect(tekst).toContain('Turniej Zastępów Starszoharcerskich');
     expect(tekst).toContain('Namiestnictwo Starszoharcerskie Hufca ZHP Gdynia');
   });
 
-  it('renders all five tabs', () => {
-    const linki = utworz(DANE).nativeElement.querySelectorAll('nav a');
+  it('renders all five tabs', async () => {
+    const linki = (await utworz(DANE)).nativeElement.querySelectorAll('nav a');
     expect([...linki].map((a: Element) => tekst(a))).toEqual([
       'Ranking',
       'Inspiracje',
@@ -42,16 +49,18 @@ describe('Shell', () => {
     ]);
   });
 
-  it('drops the "wkrótce" marker once prizes exist', () => {
+  it('drops the "wkrótce" marker once prizes exist', async () => {
     const dane: DaneTurnieju = { ...DANE, nagrody: [{ miejsce: 1, tytul: 'Wyprawa' }] };
-    const linki = utworz(dane).nativeElement.querySelectorAll('nav a');
+    const linki = (await utworz(dane)).nativeElement.querySelectorAll('nav a');
     expect(tekst(linki[4])).toBe('Nagrody');
   });
 
   it('marks only the active tab with aria-current, not colour alone', async () => {
     TestBed.configureTestingModule({
+      imports: [Shell],
       providers: [provideRouter(routes), { provide: DANE_TOKEN, useValue: DANE }],
     });
+    await TestBed.compileComponents();
     const fixture = TestBed.createComponent(Shell);
     fixture.detectChanges();
 

@@ -112,189 +112,232 @@ export class Teren {
       return;
     }
 
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-
-    const styl = getComputedStyle(document.body);
-    // Theme tokens are `oklch()` strings. three.js's `Color` only understands
-    // rgb()/hsl()/hex/named CSS colours — it silently ignores `oklch(...)`
-    // and leaves the colour white, which would look plausible-but-wrong.
-    // Painting the raw CSS colour into a 1x1 canvas and reading the pixel
-    // back forces the browser itself to resolve it to concrete sRGB bytes,
-    // which `Color` can then parse correctly.
-    const proba = document.createElement('canvas');
-    proba.width = 1;
-    proba.height = 1;
-    const kontekst2d = proba.getContext('2d');
-
-    const kolor = (nazwa: string, zapas: string): Color => {
-      const wartosc = styl.getPropertyValue(nazwa).trim();
-      if (!kontekst2d) {
-        return new Color(zapas);
-      }
-      try {
-        // Seed with the fallback first: an invalid `wartosc` is silently
-        // ignored by the fillStyle setter, so the seeded colour survives.
-        kontekst2d.fillStyle = zapas;
-        kontekst2d.fillStyle = wartosc || zapas;
-        kontekst2d.fillRect(0, 0, 1, 1);
-        const [r, g, b] = kontekst2d.getImageData(0, 0, 1, 1).data;
-        return new Color(`rgb(${r}, ${g}, ${b})`);
-      } catch {
-        return new Color(zapas);
-      }
-    };
-
-    const obozy = Array.from({ length: MAKS_OBOZOW }, () => new Vector3(0, 0, 0));
-    this.rozstawObozy(obozy);
-
-    const material = new ShaderMaterial({
-      vertexShader: VERTEX_SHADER,
-      fragmentShader: FRAGMENT_SHADER,
-      uniforms: {
-        uCzas: { value: 0 },
-        uRozmiar: { value: new Vector2(1, 1) },
-        uKursor: { value: new Vector2(0, 0) },
-        uScroll: { value: 0 },
-        uKolorTla: { value: kolor('--color-papier', '#f6f1e7') },
-        uKolorLinii: { value: kolor('--color-warstwica', '#d8cdb6') },
-        uKolorAkcentu: { value: kolor('--color-las-jasny', '#8fbf9f') },
-        uLiczbaObozow: { value: Math.min(this.store.zastepy().length, MAKS_OBOZOW) },
-        uObozy: { value: obozy },
-      },
-    });
-
-    const scene = new Scene();
-    scene.add(new Mesh(new PlaneGeometry(2, 2), material));
-    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-    const dopasuj = () => {
-      const { clientWidth, clientHeight } = canvas;
-      renderer.setSize(clientWidth, clientHeight, false);
-      material.uniforms['uRozmiar'].value.set(clientWidth, clientHeight);
-    };
-    dopasuj();
-
-    const naKursor = (zdarzenie: PointerEvent) => {
-      material.uniforms['uKursor'].value.set(
-        zdarzenie.clientX / innerWidth - 0.5,
-        0.5 - zdarzenie.clientY / innerHeight,
-      );
-    };
-
-    const naScroll = () => {
-      const zasieg = Math.max(document.body.scrollHeight - innerHeight, 1);
-      material.uniforms['uScroll'].value = scrollY / zasieg;
-    };
-
-    let widoczny = true;
+    // Everything from here down is disposable state that may end up only
+    // partially built — a throw from any of it (IntersectionObserver,
+    // getComputedStyle, setSize, geometry construction, the first render
+    // itself) must still land on the gradient with nothing leaked, not a
+    // half-built black canvas holding a live WebGL context. So every
+    // disposable is declared up front, `sprzataj()` is defined next (built
+    // to tolerate any of them still being `undefined`) and registered with
+    // `onDestroy` immediately, and only afterwards does the actual
+    // (possibly-throwing) setup run inside a single try/catch that calls
+    // that same `sprzataj()`.
+    let material: ShaderMaterial | undefined;
+    let scene: Scene | undefined;
+    let obserwator: IntersectionObserver | undefined;
+    let naKursor: ((zdarzenie: PointerEvent) => void) | undefined;
+    let naScroll: (() => void) | undefined;
+    let naResize: (() => void) | undefined;
+    let naWidocznosc: (() => void) | undefined;
     let uchwyt = 0;
-    const start = performance.now();
 
-    const klatka = () => {
-      material.uniforms['uCzas'].value = (performance.now() - start) / 1000;
-      bezpiecznyRender();
-      if (this.dziala() && widoczny && !spokojnie && document.visibilityState === 'visible') {
-        uchwyt = requestAnimationFrame(klatka);
-      } else {
-        uchwyt = 0;
+    // Runs one disposal step in isolation: cleanup must be exhaustive, so
+    // one step failing (e.g. `material.dispose()` throwing on a half-built
+    // material) must not skip the rest — the context above all must still
+    // get released even if the rest of the teardown is going badly.
+    const sprobuj = (dzialanie: () => void): void => {
+      try {
+        dzialanie();
+      } catch {
+        // Swallowed on purpose — see comment above.
       }
     };
 
-    const wznow = () => {
-      if (
-        !uchwyt &&
-        this.dziala() &&
-        widoczny &&
-        !spokojnie &&
-        document.visibilityState === 'visible'
-      ) {
-        uchwyt = requestAnimationFrame(klatka);
-      }
-    };
-
-    const obserwator = new IntersectionObserver(([wpis]) => {
-      widoczny = wpis.isIntersecting;
-      wznow();
-    });
-    obserwator.observe(canvas);
-
-    const naWidocznosc = () => wznow();
-    const naResize = () => {
-      dopasuj();
-      bezpiecznyRender();
-    };
-
-    addEventListener('pointermove', naKursor, { passive: true });
-    addEventListener('scroll', naScroll, { passive: true });
-    addEventListener('resize', naResize);
-    document.addEventListener('visibilitychange', naWidocznosc);
-
-    // Idempotent: may run once from `onShaderError` below and again from
-    // `destroyRef.onDestroy`, or the other way around if the component is
-    // torn down first and a queued shader-error callback fires afterwards.
+    // Idempotent: may run once from `onShaderError`/`bezpiecznyRender` below
+    // and again from `destroyRef.onDestroy`, in either order, against
+    // however much of the setup below actually completed before something
+    // threw.
     let posprzatane = false;
     const sprzataj = () => {
       if (posprzatane) {
         return;
       }
       posprzatane = true;
-      cancelAnimationFrame(uchwyt);
-      obserwator.disconnect();
-      removeEventListener('pointermove', naKursor);
-      removeEventListener('scroll', naScroll);
-      removeEventListener('resize', naResize);
-      document.removeEventListener('visibilitychange', naWidocznosc);
-      // Harmless if it already fired (`{ once: true }` auto-detaches it) or
-      // was already removed on the constructor-throw/context-error paths
-      // above — kept here too so this function's own cleanup is complete
-      // on its own, not dependent on which earlier branch was taken.
-      canvas.removeEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu);
-      material.dispose();
-      scene.traverse((obiekt) => {
-        if (obiekt instanceof Mesh) {
-          obiekt.geometry.dispose();
-        }
-      });
-      renderer.forceContextLoss();
-      renderer.dispose();
+      sprobuj(() => cancelAnimationFrame(uchwyt));
+      sprobuj(() => obserwator?.disconnect());
+      sprobuj(() => naKursor && removeEventListener('pointermove', naKursor));
+      sprobuj(() => naScroll && removeEventListener('scroll', naScroll));
+      sprobuj(() => naResize && removeEventListener('resize', naResize));
+      sprobuj(() => naWidocznosc && document.removeEventListener('visibilitychange', naWidocznosc));
+      sprobuj(() =>
+        canvas.removeEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu),
+      );
+      sprobuj(() => material?.dispose());
+      sprobuj(() =>
+        scene?.traverse((obiekt) => {
+          if (obiekt instanceof Mesh) {
+            obiekt.geometry.dispose();
+          }
+        }),
+      );
+      sprobuj(() => renderer.forceContextLoss());
+      sprobuj(() => renderer.dispose());
     };
 
-    // three.js does not throw when a shader fails to compile/link — it logs
-    // to the console and silently continues, which with `alpha: false` and
-    // the default clear colour paints an opaque black frame over the whole
-    // page (this element sits at `-z-10` but still covers the body
-    // background). Assigning this hook is the only way to be told about it;
-    // it fires synchronously the first time the broken program is used,
-    // i.e. from inside the very first `renderer.render(...)` call below.
-    // Disposal is deferred to a microtask so we never dispose the renderer
-    // while still inside its own render() call.
-    renderer.debug.onShaderError = () => {
-      this.dziala.set(false);
-      queueMicrotask(sprzataj);
-    };
-
-    // Registered before the first render call on purpose: if `render()`
-    // itself throws outright (not a link failure caught by onShaderError
-    // above, an actual exception), the listeners/observer registered just
-    // above must not leak while the exception unwinds past them.
+    // Registered before any of the (possibly-throwing) setup below, so
+    // nothing built in the meantime can leak while an exception unwinds
+    // past it.
     this.destroyRef.onDestroy(sprzataj);
 
-    const bezpiecznyRender = (): void => {
-      try {
-        renderer.render(scene, camera);
-      } catch {
-        // The throw already unwound out of render() by the time we get
-        // here, so it's safe to dispose synchronously (unlike the
-        // onShaderError case, which fires from inside render()'s own call
-        // stack and defers disposal to a microtask instead).
-        this.dziala.set(false);
-        sprzataj();
-      }
-    };
+    try {
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 
-    // One frame always renders, even under prefers-reduced-motion.
-    bezpiecznyRender();
-    wznow();
+      const styl = getComputedStyle(document.body);
+      // Theme tokens are `oklch()` strings. three.js's `Color` only
+      // understands rgb()/hsl()/hex/named CSS colours — it silently ignores
+      // `oklch(...)` and leaves the colour white, which would look
+      // plausible-but-wrong. Painting the raw CSS colour into a 1x1 canvas
+      // and reading the pixel back forces the browser itself to resolve it
+      // to concrete sRGB bytes, which `Color` can then parse correctly.
+      const proba = document.createElement('canvas');
+      proba.width = 1;
+      proba.height = 1;
+      const kontekst2d = proba.getContext('2d');
+
+      const kolor = (nazwa: string, zapas: string): Color => {
+        const wartosc = styl.getPropertyValue(nazwa).trim();
+        if (!kontekst2d) {
+          return new Color(zapas);
+        }
+        try {
+          // Seed with the fallback first: an invalid `wartosc` is silently
+          // ignored by the fillStyle setter, so the seeded colour survives.
+          kontekst2d.fillStyle = zapas;
+          kontekst2d.fillStyle = wartosc || zapas;
+          kontekst2d.fillRect(0, 0, 1, 1);
+          const [r, g, b] = kontekst2d.getImageData(0, 0, 1, 1).data;
+          return new Color(`rgb(${r}, ${g}, ${b})`);
+        } catch {
+          return new Color(zapas);
+        }
+      };
+
+      const obozy = Array.from({ length: MAKS_OBOZOW }, () => new Vector3(0, 0, 0));
+      this.rozstawObozy(obozy);
+
+      material = new ShaderMaterial({
+        vertexShader: VERTEX_SHADER,
+        fragmentShader: FRAGMENT_SHADER,
+        uniforms: {
+          uCzas: { value: 0 },
+          uRozmiar: { value: new Vector2(1, 1) },
+          uKursor: { value: new Vector2(0, 0) },
+          uScroll: { value: 0 },
+          uKolorTla: { value: kolor('--color-papier', '#f6f1e7') },
+          uKolorLinii: { value: kolor('--color-warstwica', '#d8cdb6') },
+          uKolorAkcentu: { value: kolor('--color-las-jasny', '#8fbf9f') },
+          uLiczbaObozow: { value: Math.min(this.store.zastepy().length, MAKS_OBOZOW) },
+          uObozy: { value: obozy },
+        },
+      });
+      const materialGotowy = material;
+
+      scene = new Scene();
+      scene.add(new Mesh(new PlaneGeometry(2, 2), materialGotowy));
+      const sceneGotowa = scene;
+      const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+      const dopasuj = () => {
+        const { clientWidth, clientHeight } = canvas;
+        renderer.setSize(clientWidth, clientHeight, false);
+        materialGotowy.uniforms['uRozmiar'].value.set(clientWidth, clientHeight);
+      };
+      dopasuj();
+
+      // Declared before `klatka`/`naResize` (which call it) even though
+      // every path that invokes them is asynchronous today — keeping the
+      // declaration order matched to the call order means a future
+      // synchronous call added in between can never hit its temporal-dead-
+      // zone.
+      const bezpiecznyRender = (): void => {
+        try {
+          renderer.render(sceneGotowa, camera);
+        } catch {
+          // The throw already unwound out of render() by the time we get
+          // here, so it's safe to dispose synchronously (unlike the
+          // onShaderError case below, which fires from inside render()'s
+          // own call stack and defers disposal to a microtask instead).
+          this.dziala.set(false);
+          sprzataj();
+        }
+      };
+
+      naKursor = (zdarzenie: PointerEvent) => {
+        materialGotowy.uniforms['uKursor'].value.set(
+          zdarzenie.clientX / innerWidth - 0.5,
+          0.5 - zdarzenie.clientY / innerHeight,
+        );
+      };
+
+      naScroll = () => {
+        const zasieg = Math.max(document.body.scrollHeight - innerHeight, 1);
+        materialGotowy.uniforms['uScroll'].value = scrollY / zasieg;
+      };
+
+      let widoczny = true;
+      const start = performance.now();
+
+      const klatka = () => {
+        materialGotowy.uniforms['uCzas'].value = (performance.now() - start) / 1000;
+        bezpiecznyRender();
+        if (this.dziala() && widoczny && !spokojnie && document.visibilityState === 'visible') {
+          uchwyt = requestAnimationFrame(klatka);
+        } else {
+          uchwyt = 0;
+        }
+      };
+
+      const wznow = () => {
+        if (
+          !uchwyt &&
+          this.dziala() &&
+          widoczny &&
+          !spokojnie &&
+          document.visibilityState === 'visible'
+        ) {
+          uchwyt = requestAnimationFrame(klatka);
+        }
+      };
+
+      obserwator = new IntersectionObserver(([wpis]) => {
+        widoczny = wpis.isIntersecting;
+        wznow();
+      });
+      obserwator.observe(canvas);
+
+      naWidocznosc = () => wznow();
+      naResize = () => {
+        dopasuj();
+        bezpiecznyRender();
+      };
+
+      addEventListener('pointermove', naKursor, { passive: true });
+      addEventListener('scroll', naScroll, { passive: true });
+      addEventListener('resize', naResize);
+      document.addEventListener('visibilitychange', naWidocznosc);
+
+      // three.js does not throw when a shader fails to compile/link — it
+      // logs to the console and silently continues, which with
+      // `alpha: false` and the default clear colour paints an opaque black
+      // frame over the whole page (this element sits at `-z-10` but still
+      // covers the body background). Assigning this hook is the only way
+      // to be told about it; it fires synchronously the first time the
+      // broken program is used, i.e. from inside the very first
+      // `renderer.render(...)` call below. Disposal is deferred to a
+      // microtask so we never dispose the renderer while still inside its
+      // own render() call.
+      renderer.debug.onShaderError = () => {
+        this.dziala.set(false);
+        queueMicrotask(sprzataj);
+      };
+
+      // One frame always renders, even under prefers-reduced-motion.
+      bezpiecznyRender();
+      wznow();
+    } catch {
+      this.dziala.set(false);
+      sprzataj();
+    }
   }
 
   /** Deterministic scatter — same patrol always lands on the same spot. */

@@ -16,7 +16,12 @@
 - Standalone components only. No NgModules. No `@angular/animations` package — use the compiler's `animate.enter` / `animate.leave`.
 - No state library. State is `signal` / `computed` inside `TurniejStore`.
 - No HTTP. All data is imported from `src/data/*.json` at build time.
-- UI copy, JSON content and commit-visible user-facing strings: **Polish**. Code identifiers, file names, commit messages: **English**.
+- UI copy and JSON content: **Polish**. Domain vocabulary in code is **Polish** too —
+  `Zastep`, `Wpis`, `Kwartal`, `waliduj`, `dane.ts` — because the domain does not survive
+  translation (`zastęp` is not `team`, `trop` is not `trail`) and the identifiers must match
+  the JSON fields the maintainer edits by hand. Everything else — framework APIs, local
+  mechanics, file paths outside `src/app/core` and `src/data`, commit messages, code
+  comments — is **English**.
 - Dates are ISO strings `YYYY-MM-DD` and are compared lexicographically. Never construct a `Date` for range filtering — it introduces timezone bugs for no gain.
 - Tailwind 4 tokens live in `src/styles/theme.css` under `@theme`. Do **not** write `--*: initial` or `--color-*: initial`; the default palette stays enabled.
 - Every task ends green on `npm run type-check` and `npx ng test --watch=false`.

@@ -288,7 +288,11 @@ Typografia: nagłówki Fraunces (serif), treść Inter (sans). Oba pliki lokalni
 
 Tekstura papieru jako inline SVG noise na tle, o niskiej nieprzezroczystości.
 
-Teksty interfejsu po polsku. Kod, nazwy plików, commity po angielsku.
+Teksty interfejsu po polsku. Słownictwo domenowe w kodzie również po polsku —
+`Zastep`, `Wpis`, `Kwartal`, `waliduj` — bo domena nie przechodzi przez tłumaczenie
+(`zastęp` to nie `team`, `trop` to nie `trail`), a identyfikatory muszą zgadzać się
+z polami JSON-a edytowanego ręcznie. Reszta — API frameworka, lokalna mechanika,
+komentarze, komunikaty commitów — po angielsku.
 
 ## 8. Testy
 

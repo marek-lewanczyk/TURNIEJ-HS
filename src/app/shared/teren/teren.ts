@@ -75,8 +75,6 @@ export class Teren {
       return;
     }
 
-    const spokojnie = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     // Belt-and-suspenders alongside the try/catch below: three.js's own
     // constructor already throws when context creation fails outright, but
     // a browser can also fire this event as a non-fatal warning while still
@@ -86,12 +84,18 @@ export class Teren {
     const naBladTworzeniaKontekstu = () => {
       bladTworzeniaKontekstu = true;
     };
-    canvas.addEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu, {
-      once: true,
-    });
 
+    // `matchMedia` and `addEventListener` are setup statements like any
+    // other here — a throw from either must still land on the gradient
+    // fallback, not escape uncaught, so both live inside this same
+    // try/catch alongside the renderer construction they precede.
+    let spokojnie: boolean;
     let renderer: WebGLRenderer;
     try {
+      spokojnie = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      canvas.addEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu, {
+        once: true,
+      });
       renderer = new WebGLRenderer({
         canvas,
         antialias: false,
@@ -340,7 +344,8 @@ export class Teren {
     }
   }
 
-  /** Deterministic scatter — same patrol always lands on the same spot. */
+  /** Deterministic scatter keyed on ranking position, not patrol identity —
+   *  a patrol moves to a different spot when its rank changes. */
   private rozstawObozy(obozy: Vector3[]): void {
     const ranking = this.store.ranking();
     const maks = Math.max(...ranking.map((pozycja) => pozycja.suma), 1);

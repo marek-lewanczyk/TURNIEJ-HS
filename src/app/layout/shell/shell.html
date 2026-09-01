@@ -3,6 +3,14 @@
     <app-teren />
   } @placeholder {
     <div class="pointer-events-none fixed inset-0 -z-10" aria-hidden="true"></div>
+  } @error {
+    <!-- A failed chunk fetch (e.g. a hashed chunk 404ing after a redeploy)
+         must land on the same gradient fallback Teren itself renders when
+         WebGL is unavailable — every failure path ends here. -->
+    <div
+      class="pointer-events-none fixed inset-0 -z-10 bg-linear-to-b from-papier to-papier-cien"
+      aria-hidden="true"
+    ></div>
   }
 
   <header class="mx-auto w-full max-w-5xl px-5 pt-10 pb-6">

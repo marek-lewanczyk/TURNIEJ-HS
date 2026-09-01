@@ -192,7 +192,7 @@ export class Teren {
 
     const klatka = () => {
       material.uniforms['uCzas'].value = (performance.now() - start) / 1000;
-      renderer.render(scene, camera);
+      bezpiecznyRender();
       if (this.dziala() && widoczny && !spokojnie && document.visibilityState === 'visible') {
         uchwyt = requestAnimationFrame(klatka);
       } else {
@@ -221,7 +221,7 @@ export class Teren {
     const naWidocznosc = () => wznow();
     const naResize = () => {
       dopasuj();
-      renderer.render(scene, camera);
+      bezpiecznyRender();
     };
 
     addEventListener('pointermove', naKursor, { passive: true });
@@ -244,6 +244,11 @@ export class Teren {
       removeEventListener('scroll', naScroll);
       removeEventListener('resize', naResize);
       document.removeEventListener('visibilitychange', naWidocznosc);
+      // Harmless if it already fired (`{ once: true }` auto-detaches it) or
+      // was already removed on the constructor-throw/context-error paths
+      // above — kept here too so this function's own cleanup is complete
+      // on its own, not dependent on which earlier branch was taken.
+      canvas.removeEventListener('webglcontextcreationerror', naBladTworzeniaKontekstu);
       material.dispose();
       scene.traverse((obiekt) => {
         if (obiekt instanceof Mesh) {
@@ -268,11 +273,28 @@ export class Teren {
       queueMicrotask(sprzataj);
     };
 
-    // One frame always renders, even under prefers-reduced-motion.
-    renderer.render(scene, camera);
-    wznow();
-
+    // Registered before the first render call on purpose: if `render()`
+    // itself throws outright (not a link failure caught by onShaderError
+    // above, an actual exception), the listeners/observer registered just
+    // above must not leak while the exception unwinds past them.
     this.destroyRef.onDestroy(sprzataj);
+
+    const bezpiecznyRender = (): void => {
+      try {
+        renderer.render(scene, camera);
+      } catch {
+        // The throw already unwound out of render() by the time we get
+        // here, so it's safe to dispose synchronously (unlike the
+        // onShaderError case, which fires from inside render()'s own call
+        // stack and defers disposal to a microtask instead).
+        this.dziala.set(false);
+        sprzataj();
+      }
+    };
+
+    // One frame always renders, even under prefers-reduced-motion.
+    bezpiecznyRender();
+    wznow();
   }
 
   /** Deterministic scatter — same patrol always lands on the same spot. */

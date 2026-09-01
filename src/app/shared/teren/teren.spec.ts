@@ -31,7 +31,10 @@ function utworz() {
 
 describe('Teren', () => {
   beforeEach(() => TestBed.resetTestingModule());
-  afterEach(() => vi.restoreAllMocks());
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
 
   it('falls back to a gradient when WebGL is unavailable', () => {
     // jsdom has no WebGL, so getContext returns null without any stubbing.
@@ -49,13 +52,24 @@ describe('Teren', () => {
   });
 
   it('falls back to the gradient when the WebGL renderer constructor throws', () => {
-    // A context object with none of the real WebGL2 API on it: `dziala`
-    // starts true (this is what `webglDostepny()` sees), but the real
-    // `WebGLRenderer` constructor throws as soon as it tries to query
-    // capabilities/extensions on this bogus context — the untested half of
-    // the non-negotiable (dziala starts true, constructor throws, dziala
-    // flips back to false and the gradient renders).
-    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({} as never);
+    // Must have a `getExtension` that returns null, or `webglDostepny()`'s
+    // own probe-release call (`kontekst.getExtension('WEBGL_lose_context')
+    // ?.loseContext()`) throws first, `dziala` starts false, and this test
+    // would land on the exact same trivial branch as the other three
+    // (constructor never even reached — see the discrimination check in
+    // the round-2 fix report). With `getExtension` present, `dziala` starts
+    // true, and the real `WebGLRenderer` constructor throws as soon as it
+    // tries to query capabilities on this otherwise-bogus context — the
+    // untested half of the non-negotiable (dziala starts true, constructor
+    // throws, dziala flips back to false and the gradient renders).
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      getExtension: () => null,
+    } as never);
+    // jsdom has no `matchMedia` at all (not even a stub that returns
+    // `{ matches: false }`), and `uruchom()` reads it before the
+    // `WebGLRenderer` constructor — without this, the whole function
+    // throws right there, uncaught, and the constructor is never reached.
+    vi.stubGlobal('matchMedia', () => ({ matches: false }));
     const fixture = utworz();
     expect(fixture.nativeElement.querySelector('[data-fallback]')).not.toBeNull();
   });

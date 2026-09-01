@@ -60,4 +60,23 @@ describe('Slupek', () => {
       .textContent as string;
     expect(tekst).toContain('Brak wpisów w tym okresie');
   });
+
+  // jsdom does not evaluate `prefers-reduced-motion` media queries or
+  // scroll-driven (view()) animation timelines, so the actual cascade can
+  // only be verified in a real browser (see task-5-report.md). This is a
+  // regression guard against the rule being deleted: `.belka` runs on a
+  // scroll-progress timeline, so zeroing `animation-duration` (as the global
+  // reduced-motion block in styles.css does) has no effect on it — the
+  // timeline itself must be dropped for reduced motion, which requires this
+  // component-local override to keep existing.
+  it('neutralises the bar reveal timeline under prefers-reduced-motion', () => {
+    const style = (Slupek as unknown as { ɵcmp: { styles: string[] } }).ɵcmp.styles.join('\n');
+    const blokRedukcji = style.match(
+      /@media \(prefers-reduced-motion: reduce\)\s*{\s*\.belka(?:\[[^\]]*\])?\s*{([^}]*)}/,
+    );
+    expect(blokRedukcji).not.toBeNull();
+    const [, deklaracje] = blokRedukcji as RegExpMatchArray;
+    expect(deklaracje).toContain('animation-timeline: none');
+    expect(deklaracje).toContain('transform: none');
+  });
 });

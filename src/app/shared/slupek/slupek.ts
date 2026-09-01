@@ -28,6 +28,23 @@ const OPIS_EKSTRA: Record<TypEkstra, string> = {
         transform: scaleX(1);
       }
     }
+
+    /* The global reduced-motion block in styles.css zeroes animation-duration,
+       but that has no effect here: this animation runs on a scroll-driven
+       progress timeline (view()), not the document's time timeline, so its
+       keyframe position is a function of scroll progress within
+       animation-range, never of wall-clock duration. Zeroing the duration
+       only makes each frame instantaneous — it does not stop the timeline
+       from mapping scroll position to keyframe progress. The animation must
+       be neutralised at its source instead: drop the timeline entirely and
+       pin the element at its resting (fully revealed) transform. */
+    @media (prefers-reduced-motion: reduce) {
+      .belka {
+        animation: none;
+        animation-timeline: none;
+        transform: none;
+      }
+    }
   `,
   template: `
     <details class="group border-b border-warstwica py-4">

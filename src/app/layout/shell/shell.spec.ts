@@ -64,10 +64,17 @@ describe('Shell', () => {
 
     expect(aktywny.getAttribute('aria-current')).toBe('page');
     expect(aktywny.className).toContain('border-sygnal');
+    // Mutually exclusive: the inactive border-colour utility must not also be
+    // present, or the two utilities would tie in the cascade and the active
+    // border would never render (see shell.html — a single computed [class]
+    // rather than a static class plus a toggled one).
+    expect(aktywny.className).not.toContain('border-transparent');
 
     for (const [i, link] of linki.entries()) {
       if (i === 2) continue;
       expect(link.getAttribute('aria-current')).toBeNull();
+      expect(link.className).toContain('border-transparent');
+      expect(link.className).not.toContain('border-sygnal');
     }
   });
 });

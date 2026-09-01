@@ -10,30 +10,58 @@
     <nav aria-label="Sekcje turnieju" class="mt-8 flex flex-wrap gap-x-6 gap-y-2">
       <a
         routerLink="/"
-        routerLinkActive="text-sygnal border-sygnal"
+        routerLinkActive
+        #rlaRanking="routerLinkActive"
         [routerLinkActiveOptions]="{ exact: true }"
         [ariaCurrentWhenActive]="'page'"
-        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        [class]="
+          'border-b-2 pb-1 text-sm font-medium hover:border-warstwica ' +
+          (rlaRanking.isActive ? 'text-sygnal border-sygnal' : 'border-transparent')
+        "
         >Ranking</a
       >
-      <a routerLink="/inspiracje" routerLinkActive="text-sygnal border-sygnal"
+      <a
+        routerLink="/inspiracje"
+        routerLinkActive
+        #rlaInspiracje="routerLinkActive"
         [ariaCurrentWhenActive]="'page'"
-        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        [class]="
+          'border-b-2 pb-1 text-sm font-medium hover:border-warstwica ' +
+          (rlaInspiracje.isActive ? 'text-sygnal border-sygnal' : 'border-transparent')
+        "
         >Inspiracje</a
       >
-      <a routerLink="/zadania" routerLinkActive="text-sygnal border-sygnal"
+      <a
+        routerLink="/zadania"
+        routerLinkActive
+        #rlaZadania="routerLinkActive"
         [ariaCurrentWhenActive]="'page'"
-        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        [class]="
+          'border-b-2 pb-1 text-sm font-medium hover:border-warstwica ' +
+          (rlaZadania.isActive ? 'text-sygnal border-sygnal' : 'border-transparent')
+        "
         >Zadania</a
       >
-      <a routerLink="/zasady" routerLinkActive="text-sygnal border-sygnal"
+      <a
+        routerLink="/zasady"
+        routerLinkActive
+        #rlaZasady="routerLinkActive"
         [ariaCurrentWhenActive]="'page'"
-        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        [class]="
+          'border-b-2 pb-1 text-sm font-medium hover:border-warstwica ' +
+          (rlaZasady.isActive ? 'text-sygnal border-sygnal' : 'border-transparent')
+        "
         >Zasady</a
       >
-      <a routerLink="/nagrody" routerLinkActive="text-sygnal border-sygnal"
+      <a
+        routerLink="/nagrody"
+        routerLinkActive
+        #rlaNagrody="routerLinkActive"
         [ariaCurrentWhenActive]="'page'"
-        class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
+        [class]="
+          'border-b-2 pb-1 text-sm font-medium hover:border-warstwica ' +
+          (rlaNagrody.isActive ? 'text-sygnal border-sygnal' : 'border-transparent')
+        "
         >Nagrody
         @if (!store.nagrodyDostepne()) {
           <span class="ml-1 text-xs text-atrament-slaby">wkrótce</span>

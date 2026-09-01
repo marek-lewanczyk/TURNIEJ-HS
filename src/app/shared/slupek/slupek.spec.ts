@@ -145,4 +145,30 @@ describe('Slupek', () => {
     expect(deklaracje).toContain('animation-timeline: none');
     expect(deklaracje).toContain('transform: none');
   });
+
+  it('hides podium treatment when place is 1 but suma is 0', () => {
+    const pozycja: PozycjaRankingu = {
+      ...POZYCJA,
+      suma: 0,
+      procentLidera: 0,
+      wpisy: [],
+    };
+    const fixture = utworz(pozycja);
+    const tekst = fixture.nativeElement.textContent as string;
+    expect(tekst).not.toContain('podium');
+
+    const miejsceSpan = fixture.nativeElement.querySelector('.font-naglowek.text-lg') as HTMLElement;
+    expect(miejsceSpan).not.toBeNull();
+    expect(miejsceSpan.classList.contains('text-sygnal')).toBe(false);
+  });
+
+  it('shows podium treatment when place is 1 and suma is positive', () => {
+    const fixture = utworz(POZYCJA);
+    const tekst = fixture.nativeElement.textContent as string;
+    expect(tekst).toContain('podium');
+
+    const miejsceSpan = fixture.nativeElement.querySelector('.font-naglowek.text-lg') as HTMLElement;
+    expect(miejsceSpan).not.toBeNull();
+    expect(miejsceSpan.classList.contains('text-sygnal')).toBe(true);
+  });
 });

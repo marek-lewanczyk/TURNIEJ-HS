@@ -85,12 +85,12 @@ export const OPIS_KATEGORII: Record<KategoriaPunktow, string> = {
         <div class="flex items-baseline gap-3">
           <span
             class="w-8 shrink-0 font-naglowek text-lg tabular-nums"
-            [class.text-sygnal]="pozycja().miejsce <= 3"
+            [class.text-sygnal]="pozycja().miejsce <= 3 && pozycja().suma > 0"
             >{{ pozycja().miejsce }}.</span
           >
           <span class="flex-1 font-medium">
             {{ pozycja().zastep.nazwa }}
-            @if (pozycja().miejsce <= 3) {
+            @if (pozycja().miejsce <= 3 && pozycja().suma > 0) {
               <span class="ml-1 text-xs uppercase tracking-wider text-atrament-slaby"
                 >podium</span
               >

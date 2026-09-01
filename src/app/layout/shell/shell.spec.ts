@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { describe, expect, it, beforeEach } from 'vitest';
 import { Shell } from './shell';
 import { DANE_TOKEN } from '../../core/turniej-store';
 import { DANE } from '../../core/dane';
+import { routes } from '../../app.routes';
 import type { DaneTurnieju } from '../../core/model/turniej.model';
 
 function utworz(dane: DaneTurnieju) {
@@ -45,5 +46,28 @@ describe('Shell', () => {
     const dane: DaneTurnieju = { ...DANE, nagrody: [{ miejsce: 1, tytul: 'Wyprawa' }] };
     const linki = utworz(dane).nativeElement.querySelectorAll('nav a');
     expect(tekst(linki[4])).toBe('Nagrody');
+  });
+
+  it('marks only the active tab with aria-current, not colour alone', async () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter(routes), { provide: DANE_TOKEN, useValue: DANE }],
+    });
+    const fixture = TestBed.createComponent(Shell);
+    fixture.detectChanges();
+
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/zadania');
+    fixture.detectChanges();
+
+    const linki: Element[] = [...fixture.nativeElement.querySelectorAll('nav a')];
+    const aktywny = linki[2]; // Zadania
+
+    expect(aktywny.getAttribute('aria-current')).toBe('page');
+    expect(aktywny.className).toContain('border-sygnal');
+
+    for (const [i, link] of linki.entries()) {
+      if (i === 2) continue;
+      expect(link.getAttribute('aria-current')).toBeNull();
+    }
   });
 });

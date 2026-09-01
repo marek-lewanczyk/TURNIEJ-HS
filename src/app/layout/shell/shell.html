@@ -10,24 +10,29 @@
     <nav aria-label="Sekcje turnieju" class="mt-8 flex flex-wrap gap-x-6 gap-y-2">
       <a
         routerLink="/"
-        routerLinkActive="text-sygnal"
+        routerLinkActive="text-sygnal border-sygnal"
         [routerLinkActiveOptions]="{ exact: true }"
+        [ariaCurrentWhenActive]="'page'"
         class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
         >Ranking</a
       >
-      <a routerLink="/inspiracje" routerLinkActive="text-sygnal"
+      <a routerLink="/inspiracje" routerLinkActive="text-sygnal border-sygnal"
+        [ariaCurrentWhenActive]="'page'"
         class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
         >Inspiracje</a
       >
-      <a routerLink="/zadania" routerLinkActive="text-sygnal"
+      <a routerLink="/zadania" routerLinkActive="text-sygnal border-sygnal"
+        [ariaCurrentWhenActive]="'page'"
         class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
         >Zadania</a
       >
-      <a routerLink="/zasady" routerLinkActive="text-sygnal"
+      <a routerLink="/zasady" routerLinkActive="text-sygnal border-sygnal"
+        [ariaCurrentWhenActive]="'page'"
         class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
         >Zasady</a
       >
-      <a routerLink="/nagrody" routerLinkActive="text-sygnal"
+      <a routerLink="/nagrody" routerLinkActive="text-sygnal border-sygnal"
+        [ariaCurrentWhenActive]="'page'"
         class="border-b-2 border-transparent pb-1 text-sm font-medium hover:border-warstwica"
         >Nagrody
         @if (!store.nagrodyDostepne()) {

@@ -1,1 +1,36 @@
 <h2 class="text-2xl font-semibold">Nagrody</h2>
+
+@if (store.nagrodyDostepne()) {
+  <ul class="mt-8 grid gap-4 sm:grid-cols-3">
+    @for (nagroda of posortowane(); track nagroda.miejsce) {
+      <li
+        [attr.data-miejsce]="nagroda.miejsce"
+        class="rounded-lg border p-5"
+        [class.border-zloto]="nagroda.miejsce === 1"
+        [class.border-warstwica]="nagroda.miejsce !== 1"
+      >
+        <p class="font-naglowek text-3xl tabular-nums">{{ nagroda.miejsce }}</p>
+        <p class="mt-2 font-medium">{{ nagroda.tytul }}</p>
+        @if (nagroda.opis) {
+          <p class="mt-1 text-sm text-atrament-slaby">{{ nagroda.opis }}</p>
+        }
+      </li>
+    }
+  </ul>
+} @else {
+  <div class="mt-8">
+    <app-pusty-stan
+      naglowek="Wkrótce"
+      tresc="Nagrody zostaną ogłoszone w trakcie turnieju. Trafią tutaj, gdy tylko organizatorzy je potwierdzą."
+    />
+  </div>
+
+  <ul class="mt-6 grid gap-4 opacity-40 sm:grid-cols-3" aria-hidden="true">
+    @for (miejsce of zapowiedz; track miejsce) {
+      <li [attr.data-miejsce]="miejsce" class="rounded-lg border border-dashed border-warstwica p-5">
+        <p class="font-naglowek text-3xl tabular-nums">{{ miejsce }}</p>
+        <p class="mt-2 h-4 w-2/3 rounded bg-papier-cien"></p>
+      </li>
+    }
+  </ul>
+}

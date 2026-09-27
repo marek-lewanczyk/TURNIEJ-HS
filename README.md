@@ -20,6 +20,117 @@ plików JSON w `src/data/`, a publikacja odbywa się przez push na `main`.
 | [Dodać materiał do pobrania](#dodać-materiał-do-pobrania) | `materialy.json` + `public/materialy/` | Materiały |
 | [Zmienić nazwę, daty albo kwartały](#zmienić-nazwę-daty-albo-kwartały) | `turniej.json` | cała strona |
 
+## Co zmieniasz w trakcie turnieju
+
+Większość plików ustawia się raz, na starcie. Regularnie zmieniają się tylko te:
+
+| Kiedy | Plik | Co robisz |
+|---|---|---|
+| 1. dnia każdego miesiąca | `turniej.json` (+ PDF listu) | Uzupełniasz `list`, `punktPrawa` i `listPlik` bieżącego miesiąca — [instrukcja](#ogłosić-list-miesiąca-albo-punkt-prawa) |
+| Po każdym spotkaniu punktacyjnym (nocka 18/19.12, RTL 19–21.03, zlot 18–20.06) | `punkty.json` | Dopisujesz zatwierdzone punkty wszystkich zastępów — [instrukcja](#dopisać-punkty) |
+| Gdy nowy zastęp się zgłosi (od początku kwartału) | `zastepy.json` | [instrukcja](#dopisać-zastęp) |
+| Najpóźniej przed III kwartałem | `nagrody.json` | Dopisujesz nagrody za 2. i 3. miejsce, jeśli będą — [instrukcja](#ogłosić-nagrody) |
+| Gdy pojawi się nowy dokument | `materialy.json` (+ plik) | [instrukcja](#dodać-materiał-do-pobrania) |
+| Gdy zmieni się regulamin | `zasady.json` + nowy PDF regulaminu | [instrukcja](#zmienić-zasady) |
+
+`inspiracje.json`, `zadania.json` i kwartały w `turniej.json` zmieniasz tylko wtedy,
+gdy organizatorzy tak postanowią.
+
+## Jak edytować plik — krok po kroku
+
+Są dwie drogi. Do pojedynczych poprawek wystarczy przeglądarka; do większych
+zmian (np. punkty po spotkaniu) wygodniej lokalnie, bo od razu widać efekt.
+
+### Droga A: w przeglądarce, na GitHubie
+
+Nie trzeba nic instalować.
+
+1. Otwórz repozytorium na GitHubie i wejdź w folder `src/data/`.
+2. Kliknij plik, który chcesz zmienić (np. `punkty.json`).
+3. Kliknij ikonę ołówka (**Edit this file**) w prawym górnym rogu podglądu.
+4. Wprowadź zmianę. Wzory wpisów znajdziesz w sekcjach niżej — najprościej
+   skopiować istniejący wpis i podmienić wartości.
+5. Kliknij **Commit changes…**. W polu opisu wpisz, co zmieniasz, np.
+   `data: punkty z nocki zastępowych`. Zostaw zaznaczone
+   **Commit directly to the main branch** i zatwierdź.
+6. Wejdź w zakładkę **Actions**. Po ok. dwóch minutach przy Twoim commicie pojawi
+   się zielony ✓ — strona jest zaktualizowana. Czerwony ✗ opisuje sekcja
+   [Gdy deploy się nie uda](#gdy-deploy-się-nie-uda).
+
+**Dodanie pliku (PDF listu, nowy materiał):** wejdź w folder docelowy
+(`public/materialy/` albo `public/materialy/listy/`), kliknij
+**Add file → Upload files**, przeciągnij plik i zatwierdź przez **Commit changes**.
+Najpierw nadaj plikowi nazwę bez spacji i polskich znaków (np.
+`2026-10-punkt-2.pdf`). Dopiero potem edytuj JSON, który na ten plik wskazuje —
+wtedy link działa od pierwszego deployu.
+
+### Droga B: lokalnie, na komputerze
+
+Wymaga zainstalowanego Node.js i sklonowanego repozytorium (patrz
+[Praca lokalna](#praca-lokalna)).
+
+1. Pobierz najnowszą wersję: `git pull`.
+2. Uruchom podgląd: `npm start` i otwórz http://localhost:4200.
+3. Edytuj plik w `src/data/` w dowolnym edytorze (np. VS Code — podkreśli
+   błędy składni JSON na czerwono). Strona przeładuje się sama po zapisie.
+4. Sprawdź, czy wszystko wygląda dobrze, a potem uruchom testy — to ten sam
+   walidator, który zatrzymałby deploy:
+
+   ```bash
+   npx ng test --watch=false
+   ```
+
+5. Opublikuj:
+
+   ```bash
+   git add src/data public/materialy
+   git commit -m "data: punkty z nocki zastępowych"
+   git push
+   ```
+
+### Przykład: punkty po nocce zastępowych
+
+Zastępowi zaproponowali, organizatorzy zatwierdzili: Grom 15 pkt za biwak,
+Asy 8 pkt za trop plus 5 pkt ekstra za trop na punkt Prawa. Do tablicy w
+`punkty.json` dopisujesz trzy obiekty — każde osiągnięcie osobno, z datą spotkania:
+
+```json
+{ "id": "2026-12-19-grom-biwak", "data": "2026-12-19", "zastepId": "grom", "tytul": "Biwak zastępu", "punkty": 15, "kategoria": "biwak" },
+{ "id": "2026-12-19-asy-trop", "data": "2026-12-19", "zastepId": "asy", "tytul": "Trop „Zero hejtu”", "punkty": 8, "kategoria": "trop" },
+{ "id": "2026-12-19-asy-trop-ekstra", "data": "2026-12-19", "zastepId": "asy", "tytul": "Trop na punkt Prawa miesiąca", "punkty": 5, "kategoria": "trop", "ekstra": "punkt-prawa" }
+```
+
+Pamiętaj o przecinku między poprzednim ostatnim wpisem a nowymi i o braku
+przecinka po ostatnim. Aktualne `id` zastępów są w `zastepy.json`.
+
+### Przykład: list na październik
+
+1. Wgraj PDF jako `public/materialy/listy/2026-10-punkt-2.pdf`.
+2. W `turniej.json` znajdź październik i zamień `null` na treść:
+
+```json
+{
+  "iso": "2026-10",
+  "nazwa": "październik",
+  "list": "Temat listu",
+  "punktPrawa": "2. Na słowie harcerza polegaj jak na Zawiszy.",
+  "listPlik": "materialy/listy/2026-10-punkt-2.pdf"
+}
+```
+
+### Gdy deploy się nie uda
+
+Strona zostaje wtedy na poprzedniej, poprawnej wersji — nic się nie psuje.
+
+1. W zakładce **Actions** kliknij czerwony przebieg, potem krok, który się nie
+   powiódł (**Test** albo **Build**).
+2. Szukaj linii z nazwą pliku:
+   - **Build** z `✘ [ERROR]` i ścieżką `src/data/…json:9:131` — błąd składni
+     (zwykle przecinek albo cudzysłów) w podanej linii.
+   - **Test** z komunikatem po polsku, np. `wpis 2026-12-19-grom-biwak: nieznany
+     zastepId "Grom"` — walidator mówi dokładnie, który wpis i które pole.
+3. Popraw plik (drogą A albo B) i zatwierdź ponownie.
+
 ## Zanim zaczniesz — trzy rzeczy o JSON
 
 **Przecinki.** Elementy w tablicy i pola w obiekcie rozdziela przecinek, ale po

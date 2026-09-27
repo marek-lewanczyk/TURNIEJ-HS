@@ -21,6 +21,13 @@
     "format": "PDF"
   },
   {
+    "id": "instrukcja-zastepowego",
+    "tytul": "Instrukcja dla zastępowych",
+    "opis": "Dziesięć krótkich instrukcji: frekwencja, pomysły na zbiórki, wybór kategorii i cele tropu, służba, podział zadań, sprawności i stopnie, planowanie zbiórek, urozmaicanie i podsumowanie tropu.",
+    "plik": "materialy/instrukcja-zastepowego.pdf",
+    "format": "PDF"
+  },
+  {
     "id": "przyklady-tropow",
     "tytul": "Przykłady tropów starszoharcerskich",
     "opis": "Propozycje tropów w siedmiu kategoriach. Wersja robocza RN ZHP, przed finalną korektą językową.",

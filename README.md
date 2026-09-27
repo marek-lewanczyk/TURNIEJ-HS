@@ -51,9 +51,9 @@ Plik: `src/data/punkty.json`. Dodaj obiekt na końcu tablicy:
 
 ```json
 {
-  "id": "2026-12-19-aptus-biwak",
+  "id": "2026-12-19-grom-biwak",
   "data": "2026-12-19",
-  "zastepId": "aptus",
+  "zastepId": "grom",
   "tytul": "Biwak zastępu w Kolibkach",
   "opis": "Dwa dni, własna kuchnia, gra nocna.",
   "punkty": 12,
@@ -73,7 +73,7 @@ Wszystkie pola poza `opis` i `ekstra` są wymagane.
   `2027-03-19`–`2027-03-21`, zlot `2027-06-18`–`2027-06-20`. Kwartały w
   `turniej.json` są tak ustawione, żeby każde spotkanie wpadało do swojego kwartału.
 - `zastepId` — musi istnieć w `zastepy.json`. Uwaga: to `id` zastępu, nie jego
-  nazwa — `aptus`, nie `Aptus`.
+  nazwa — `lesny-zwiad`, nie `Leśny Zwiad`.
 - `tytul` — krótki tytuł osiągnięcia, niepusty. Pokazuje się w rozwinięciu wiersza.
 - `opis` — pomiń albo dopisz jedno zdanie szczegółów. Wyświetla się pod tytułem.
 - `punkty` — liczba całkowita. Może być ujemna (kara), nie może być ułamkiem.
@@ -93,7 +93,7 @@ Kolejność wpisów w pliku nie ma znaczenia — strona sortuje je sama, od najn
 Plik: `src/data/zastepy.json`. Dodaj obiekt do tablicy:
 
 ```json
-{ "id": "borealis", "nazwa": "Borealis", "barwa": "zloto", "dolaczyl": "2027-01-10" }
+{ "id": "borealis", "nazwa": "Borealis", "barwa": "zloto", "dolaczyl": "2026-12-20" }
 ```
 
 - `id` — bez polskich znaków i spacji, małymi literami. To on trafia potem do

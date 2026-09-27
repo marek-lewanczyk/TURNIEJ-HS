@@ -1,4 +1,10 @@
 [
-  { "id": "aptus", "nazwa": "Aptus", "barwa": "las", "dolaczyl": "2026-09-19" },
-  { "id": "cirrus", "nazwa": "Cirrus", "barwa": "sygnal", "dolaczyl": "2026-09-19" }
+  { "id": "roza-wiatrow", "nazwa": "Róża Wiatrów", "barwa": "las", "dolaczyl": "2026-09-19" },
+  { "id": "grom", "nazwa": "Grom", "barwa": "sygnal", "dolaczyl": "2026-09-19" },
+  { "id": "czerwone-muchomorki", "nazwa": "Czerwone Muchomorki", "barwa": "zloto", "dolaczyl": "2026-09-19" },
+  { "id": "lesny-zwiad", "nazwa": "Leśny Zwiad", "barwa": "las-jasny", "dolaczyl": "2026-09-19" },
+  { "id": "eldar", "nazwa": "Eldar", "barwa": "atrament", "dolaczyl": "2026-09-19" },
+  { "id": "stefanowe-chlopaki", "nazwa": "Stefanowe Chłopaki", "barwa": "atrament-slaby", "dolaczyl": "2026-09-19" },
+  { "id": "stefanowe-dziewczyny", "nazwa": "Stefanowe Dziewczyny", "barwa": "las", "dolaczyl": "2026-09-19" },
+  { "id": "asy", "nazwa": "Asy", "barwa": "sygnal", "dolaczyl": "2026-09-19" }
 ]

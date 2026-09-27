@@ -38,13 +38,14 @@ describe('Shell', () => {
     expect(tekst).toContain('Namiestnictwo Starszoharcerskie Hufca ZHP Gdynia');
   });
 
-  it('renders all five tabs', async () => {
+  it('renders all six tabs', async () => {
     const linki = (await utworz(DANE)).nativeElement.querySelectorAll('nav a');
     expect([...linki].map((a: Element) => tekst(a))).toEqual([
       'Ranking',
       'Inspiracje',
       'Zadania',
       'Zasady',
+      'Materiały',
       'Nagrody wkrótce',
     ]);
   });
@@ -52,7 +53,7 @@ describe('Shell', () => {
   it('drops the "wkrótce" marker once prizes exist', async () => {
     const dane: DaneTurnieju = { ...DANE, nagrody: [{ miejsce: 1, tytul: 'Wyprawa' }] };
     const linki = (await utworz(dane)).nativeElement.querySelectorAll('nav a');
-    expect(tekst(linki[4])).toBe('Nagrody');
+    expect(tekst(linki[5])).toBe('Nagrody');
   });
 
   it('marks only the active tab with aria-current, not colour alone', async () => {

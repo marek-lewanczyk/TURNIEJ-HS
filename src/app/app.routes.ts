@@ -23,6 +23,12 @@ export const routes: Routes = [
     title: 'Zasady — Turniej Zastępów Starszoharcerskich',
   },
   {
+    path: 'materialy',
+    loadComponent: () =>
+      import('./pages/materialy/materialy-page').then((m) => m.MaterialyPage),
+    title: 'Materiały — Turniej Zastępów Starszoharcerskich',
+  },
+  {
     path: 'nagrody',
     loadComponent: () => import('./pages/nagrody/nagrody-page').then((m) => m.NagrodyPage),
     title: 'Nagrody — Turniej Zastępów Starszoharcerskich',

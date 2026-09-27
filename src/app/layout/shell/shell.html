@@ -68,6 +68,17 @@
         >Zasady</a
       >
       <a
+        routerLink="/materialy"
+        routerLinkActive
+        #rlaMaterialy="routerLinkActive"
+        [ariaCurrentWhenActive]="'page'"
+        [class]="
+          'border-b-2 pb-1 text-sm font-medium hover:border-warstwica ' +
+          (rlaMaterialy.isActive ? 'text-sygnal border-sygnal' : 'border-transparent')
+        "
+        >Materiały</a
+      >
+      <a
         routerLink="/nagrody"
         routerLinkActive
         #rlaNagrody="routerLinkActive"

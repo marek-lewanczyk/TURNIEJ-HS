@@ -18,7 +18,13 @@ const DANE_TESTOWE: DaneTurnieju = {
         start: '2026-09-19',
         koniec: '2026-12-20',
         miesiace: [
-          { iso: '2026-09', nazwa: 'wrzesień', list: 'O początkach', punktPrawa: 'Pierwszy' },
+          {
+            iso: '2026-09',
+            nazwa: 'wrzesień',
+            list: 'O początkach',
+            punktPrawa: 'Pierwszy',
+            listPlik: 'materialy/listy/2026-09.pdf',
+          },
           { iso: '2026-10', nazwa: 'październik', list: null, punktPrawa: null },
         ],
       },
@@ -69,5 +75,12 @@ describe('ZadaniaPage', () => {
 
   it('marks no month as current outside the tournament', () => {
     expect(utworz('2027-09-01').nativeElement.querySelector('[data-biezacy]')).toBeNull();
+  });
+
+  it('links the letter file when it is published', () => {
+    const linki = utworz('2026-09-25').nativeElement.querySelectorAll('a[data-list]');
+    expect(linki.length).toBe(1);
+    expect(linki[0].getAttribute('href')).toBe('materialy/listy/2026-09.pdf');
+    expect(linki[0].textContent).toContain('Czytaj list');
   });
 });

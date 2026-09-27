@@ -36,6 +36,16 @@
             <span class="text-atrament-slaby">jeszcze nieogłoszony</span>
           }
         </p>
+        @if (miesiac.listPlik) {
+          <a
+            data-list
+            class="mt-2 inline-block border-b-2 border-sygnal pb-0.5 text-sm font-medium text-sygnal hover:border-warstwica"
+            [href]="miesiac.listPlik"
+            target="_blank"
+            rel="noopener"
+            >Czytaj list (PDF)</a
+          >
+        }
       </li>
     }
   </ul>

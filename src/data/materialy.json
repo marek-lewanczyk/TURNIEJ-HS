@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "id": "regulamin",
+    "tytul": "Regulamin Turnieju 2026/2027",
+    "opis": "Pełny tekst regulaminu Turnieju Zastępów Starszoharcerskich Hufca ZHP Gdynia.",
+    "plik": "materialy/regulamin-turnieju-2026-27.pdf",
+    "format": "PDF"
+  },
+  {
+    "id": "karta-tropu",
+    "tytul": "Karta tropu starszoharcerskiego",
+    "opis": "Do zaplanowania tropu: cel, zadania, osoby odpowiedzialne, terminy i ocena.",
+    "plik": "materialy/karta-tropu.pdf",
+    "format": "PDF"
+  },
+  {
+    "id": "konspekt-zbiorki",
+    "tytul": "Pusty konspekt zbiórki",
+    "opis": "Szablon do zaplanowania zbiórki zastępu.",
+    "plik": "materialy/konspekt-zbiorki.pdf",
+    "format": "PDF"
+  },
+  {
+    "id": "przyklady-tropow",
+    "tytul": "Przykłady tropów starszoharcerskich",
+    "opis": "Propozycje tropów w siedmiu kategoriach. Wersja robocza RN ZHP, przed finalną korektą językową.",
+    "plik": "materialy/przyklady-tropow.docx",
+    "format": "DOCX"
+  }
+]

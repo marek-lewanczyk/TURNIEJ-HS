@@ -39,7 +39,7 @@ describe('Shell', () => {
   });
 
   it('renders all six tabs', async () => {
-    const linki = (await utworz(DANE)).nativeElement.querySelectorAll('nav a');
+    const linki = (await utworz({ ...DANE, nagrody: [] })).nativeElement.querySelectorAll('nav a');
     expect([...linki].map((a: Element) => tekst(a))).toEqual([
       'Ranking',
       'Inspiracje',

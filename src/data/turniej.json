@@ -8,9 +8,15 @@
       "id": "q1",
       "nazwa": "Kwartał I",
       "start": "2026-09-19",
-      "koniec": "2026-12-20",
+      "koniec": "2026-12-19",
       "miesiace": [
-        { "iso": "2026-09", "nazwa": "wrzesień", "list": null, "punktPrawa": null },
+        {
+          "iso": "2026-09",
+          "nazwa": "wrzesień",
+          "list": "Sumienne spełnianie obowiązków",
+          "punktPrawa": "1. Harcerz sumiennie spełnia swoje obowiązki wynikające z Przyrzeczenia Harcerskiego.",
+          "listPlik": "materialy/listy/2026-09-punkt-1.pdf"
+        },
         { "iso": "2026-10", "nazwa": "październik", "list": null, "punktPrawa": null },
         { "iso": "2026-11", "nazwa": "listopad", "list": null, "punktPrawa": null },
         { "iso": "2026-12", "nazwa": "grudzień", "list": null, "punktPrawa": null }
@@ -19,8 +25,8 @@
     {
       "id": "q2",
       "nazwa": "Kwartał II",
-      "start": "2026-12-21",
-      "koniec": "2027-03-20",
+      "start": "2026-12-20",
+      "koniec": "2027-03-21",
       "miesiace": [
         { "iso": "2027-01", "nazwa": "styczeń", "list": null, "punktPrawa": null },
         { "iso": "2027-02", "nazwa": "luty", "list": null, "punktPrawa": null },
@@ -30,7 +36,7 @@
     {
       "id": "q3",
       "nazwa": "Kwartał III",
-      "start": "2027-03-21",
+      "start": "2027-03-22",
       "koniec": "2027-06-20",
       "miesiace": [
         { "iso": "2027-04", "nazwa": "kwiecień", "list": null, "punktPrawa": null },

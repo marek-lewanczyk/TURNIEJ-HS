@@ -1,34 +1,99 @@
 [
   {
-    "id": "przyznawanie",
-    "naglowek": "Jak przyznajemy punkty",
+    "id": "postanowienia-ogolne",
+    "naglowek": "§1. Postanowienia ogólne",
     "akapity": [
-      "Organizatorzy nie zakładają konkretnej puli punktowanych aktywności. Podczas spotkań zastępowi dzielą się osiągnięciami, które zrealizowali w danym okresie, i wzajemnie przyznają sobie za nie punkty.",
-      "Punkty mogą zostać przyznane za urozmaicenie obrzędowości zastępu, zrealizowanie tropu, zajęcie miejsca na podium podczas rajdu, zorganizowanie biwaku zastępu i wiele innych — warto zajrzeć do listy inspiracji. Ich liczba zależy od decyzji innych zastępowych.",
-      "Takie rozwiązanie dostosowuje turniej do zastępów na zróżnicowanych etapach działalności i odpowiada na naturalne potrzeby różnych jednostek."
+      "1. Turniej Zastępów Starszoharcerskich organizowany jest przez zespół organizatorów Turnieju, w składzie: pwd. Maria Wiwatowska, pwd. Marek Lewańczyk, pwd. Dobrochna Sadowska, ćw. Michał Paszak, sam. Dominika Bandera-Chmielarska, sam. Lena Jadwiga Bukowska, działający przy namiestnictwie starszoharcerskim Hufca ZHP Gdynia.",
+      "2. Komendantką Turnieju jest pwd. Maria Wiwatowska. Turniej wspiera namiestnik starszoharcerski.",
+      "3. Turniej trwa od startu metodyki starszoharcerskiej, tj. 19.09.2026 r., do zlotu hufca, tj. 20.06.2027 r.",
+      "4. Kadra jednostek zostaje zapoznana z programem Turnieju z wyprzedzeniem umożliwiającym uwzględnienie go w rocznych planach pracy drużyn."
     ]
   },
   {
-    "id": "ekstra",
-    "naglowek": "Punkty ekstra",
+    "id": "cele",
+    "naglowek": "§2. Cele",
     "akapity": [
-      "Zrealizowanie zbiórki zastępu spójnej z tematyką listu z danego miesiąca.",
-      "Realizacja tropu opierającego się o punkt Prawa Harcerskiego przypisany do jednego z miesięcy aktualnie trwającego kwartału.",
-      "Wykonanie zadania z bazy przygotowanej przez organizatorów."
+      "1. Wzmocnienie poczucia sprawczości w zastępowych i wspieranie ich w pracy z zastępami.",
+      "2. Pielęgnowanie w uczestnikach świadomości wartości prezentowanych w punktach Prawa Harcerskiego.",
+      "3. Budowanie opartych na szacunku i wsparciu kontaktów między zastępowymi z różnych jednostek.",
+      "4. Poszerzanie perspektyw poprzez wymianę doświadczeń i pomysłów z harcerzami z innych środowisk."
     ]
   },
   {
-    "id": "wylaczenia",
-    "naglowek": "Czego nie punktujemy",
+    "id": "uczestnictwo",
+    "naglowek": "§3. Uczestnictwo",
     "akapity": [
-      "Punkty nie będą przyznawane za zdobywane indywidualnie instrumenty metodyczne, takie jak stopnie, sprawności i wyzwania — chyba że zadanie miesiąca będzie się na nich opierać."
+      "1. W Turnieju uczestniczą zastępy starszoharcerskie Hufca ZHP Gdynia.",
+      "2. Zastęp zgłasza drużynowy(-a), w terminie i formie ogłoszonych przez Organizatorów.",
+      "3. Zastęp na spotkaniach Turnieju reprezentuje zastępowy. W razie niemożności udziału zastępowy wyznacza w zastępstwie innego członka zastępu (np. podzastępowego) i informuje o tym Organizatorów przed spotkaniem.",
+      "4. Zastępowi dołączają do grupy na komunikatorze prowadzonej przez Organizatorów — jest to podstawowy kanał komunikacji w Turnieju.",
+      "5. Punkty przypisane są do zastępu, nie do poszczególnych osób. Zmiany składu zastępu nie powodują zmiany liczby punktów.",
+      "6. Zastęp utworzony w trakcie roku może dołączyć do Turnieju z początkiem najbliższego kwartału, po zgłoszeniu do Organizatorów."
     ]
   },
   {
-    "id": "zastepy",
-    "naglowek": "Dołączanie w trakcie",
+    "id": "przebieg",
+    "naglowek": "§4. Przebieg",
     "akapity": [
-      "Zastęp może dołączyć do turnieju w dowolnym momencie. Pojawia się wtedy w rankingu z zerową liczbą punktów i zbiera je na tych samych zasadach co pozostali."
+      "1. Turniej zakłada trzy kwartały pracy zastępów, które są jednocześnie okresami punktowanymi:",
+      "a) I kwartał: 19.09.2026 – 18.12.2026 — punktowany podczas nocki zastępowych (18/19.12.2026),",
+      "b) II kwartał: 18.12.2026 – 21.03.2027 — punktowany podczas spotkania na RTL-u (19–21.03.2027),",
+      "c) III kwartał: 21.03.2027 – 18.06.2027 — punktowany podczas zlotu hufca (18–20.06.2027).",
+      "2. Zastępowi i Organizatorzy spotkają się łącznie 4 razy: Turniej rozpoczyna spotkanie dla zastępowych po starcie metodyki (19.09.2026) o charakterze motywacyjno-inspiracyjnym, a kolejne trzy spotkania są spotkaniami punktacyjnymi wymienionymi w ust. 1.",
+      "3. Pierwszego dnia każdego miesiąca zastępowi otrzymują list wprowadzający do punktu Prawa Harcerskiego, który w danym miesiącu ma im towarzyszyć, wraz z propozycją tematycznej gawędy na zbiórkę zastępu oraz treścią zadania ekstra.",
+      "4. Zastępowi mogą kontrolować swoją pozycję na wirtualnej mapie Turnieju, na której znajdą aktualną wizualizację wyników, regulamin oraz materiały inspiracyjne i zadania dodatkowe.",
+      "5. Organizatorzy zapewniają zastępowym listę inspiracji z pomysłami na urozmaicenie pracy z zastępem oraz bazę pobocznych zadań do realizacji w międzyczasie.",
+      "6. Raz na dwa tygodnie, po wcześniejszym zapowiedzeniu się, zastępowi mogą skorzystać z zewnętrznej porady lub wsparcia w formie rozmowy telefonicznej lub stacjonarnej z komendantką Turnieju, namiestnikiem starszoharcerskim lub członkinią zespołu ds. kontaktu z zastępowymi."
+    ]
+  },
+  {
+    "id": "punktacja",
+    "naglowek": "§5. Punktacja",
+    "akapity": [
+      "1. Punkty przyznawane są wyłącznie podczas trzech spotkań punktacyjnych, każdorazowo za osiągnięcia zrealizowane w kończącym się kwartale.",
+      "2. Organizatorzy nie ustalają zamkniętej listy punktowanych aktywności. Osiągnięciem jest działanie zrealizowane przez zastęp jako grupę w okresie danego kwartału — np. urozmaicenie obrzędowości zastępu, zrealizowanie tropu, zajęcie miejsca na podium podczas rajdu, zorganizowanie biwaku zastępu i wiele innych (warto zajrzeć do listy inspiracji).",
+      "3. Podczas spotkania punktacyjnego każdy zastępowy prezentuje osiągnięcia swojego zastępu z danego kwartału, a następnie zastępowi wspólnie proponują liczbę punktów za osiągnięcia pozostałych zastępów. Zastępowy nie bierze udziału w ustalaniu punktów dla własnego zastępu.",
+      "4. Wszystkie propozycje punktowe zatwierdzają Organizatorzy. Organizatorzy mają prawo skorygować lub odrzucić propozycję, w szczególności, gdy jest rażąco zawyżona lub zaniżona, wynika z wcześniejszej zmowy zastępów albo dotyczy działania niepodlegającego punktacji. Punkty stają się ostateczne z chwilą zatwierdzenia.",
+      "5. Punktowane są wyłącznie osiągnięcia udokumentowane (np. zdjęcia, kronika, relacja, potwierdzenie drużynowego). Organizatorzy mogą poprosić o dodatkowy dowód lub potwierdzić realizację u drużynowego(-ej).",
+      "6. Zasady szczegółowe:",
+      "a) każde osiągnięcie może być zapunktowane tylko raz i tylko w jednym kwartale; jedno wydarzenie nie może być dzielone na kilka osiągnięć w celu zwielokrotnienia punktów,",
+      "b) osiągnięcia niezaprezentowane na spotkaniu punktacyjnym danego kwartału nie przechodzą na kolejny kwartał, chyba że Organizatorzy w uzasadnionych przypadkach postanowią inaczej,",
+      "c) punktowane są wyłącznie działania zrealizowane w okresie trwania Turnieju, zgodnie z zasadami bezpieczeństwa i instrukcjami obowiązującymi w ZHP (m.in. biwak zastępu — za wiedzą i zgodą drużynowego(-ej)),",
+      "d) punkty nie są przyznawane za zdobywane indywidualnie instrumenty metodyczne (stopnie, sprawności, wyzwania), chyba że zadanie miesiąca będzie się na nich opierać,",
+      "e) działania sprzeczne z Prawem Harcerskim, regulaminami ZHP lub prawem powszechnie obowiązującym nie podlegają punktacji.",
+      "7. Punkty ekstra przyznają Organizatorzy za: zrealizowanie zbiórki zastępu spójnej z tematyką listu z danego miesiąca, realizację tropu opierającego się o punkt Prawa Harcerskiego przypisany do jednego z miesięcy aktualnie trwającego kwartału oraz wykonanie zadania z bazy przygotowanej przez Organizatorów. Wysokość i zasady przyznawania punktów ekstra Organizatorzy ogłaszają wraz z listami miesięcznymi i bazą zadań.",
+      "8. Jeżeli na spotkaniu punktacyjnym nie jest obecny ani zastępowy, ani wyznaczony zastępca, zastęp może przed spotkaniem przekazać Organizatorom pisemny meldunek z dokumentacją osiągnięć — osiągnięcia zaprezentują wówczas Organizatorzy, a punktowanie odbywa się na zasadach ogólnych. Brak meldunku oznacza brak punktów za dany kwartał.",
+      "9. Prezentując osiągnięcia i proponując punkty, zastępowi zobowiązani są do przestrzegania Prawa Harcerskiego, w szczególności punktu 2. Poświadczenie nieprawdy skutkuje odebraniem punktów za dane osiągnięcie; w rażących przypadkach Organizatorzy mogą dodatkowo obniżyć wynik zastępu lub wykluczyć zastęp z punktacji kwartału.",
+      "10. Wyniki każdego kwartału publikowane są na mapie Turnieju po spotkaniu punktacyjnym."
+    ]
+  },
+  {
+    "id": "protesty",
+    "naglowek": "§6. Protesty",
+    "akapity": [
+      "1. Każdy zastęp ma prawo zgłosić protest dotyczący punktacji w ciągu 7 dni od publikacji wyników kwartału — do komendantki Turnieju.",
+      "2. Protest rozpatrują Organizatorzy w porozumieniu z drużynowym(-ą) zainteresowanego zastępu. Rozstrzygnięcie jest ostateczne."
+    ]
+  },
+  {
+    "id": "nagrody",
+    "naglowek": "§7. Nagrody",
+    "akapity": [
+      "1. Zastęp, który po trzech kwartałach zdobędzie najwięcej punktów, otrzyma tytuł „NAJLEPSZEGO ZASTĘPU STARSZOHARCERSKIEGO HUFCA ZHP GDYNIA 2026/2027”.",
+      "2. Członkowie zwycięskiego zastępu otrzymają szarfy, które będą mogli dumnie nosić na każdym wydarzeniu hufcowym przez cały kolejny rok harcerski.",
+      "3. Organizatorzy mogą przewidzieć dodatkowe nagrody — informacja o nich zostanie ogłoszona najpóźniej przed rozpoczęciem III kwartału.",
+      "4. W przypadku równej liczby punktów o kolejności decyduje wyższy wynik za III kwartał, a jeżeli i on jest równy — rozstrzygnięcie Organizatorów podjęte w porozumieniu z drużynowymi starszoharcerskimi."
+    ]
+  },
+  {
+    "id": "postanowienia-koncowe",
+    "naglowek": "§8. Postanowienia końcowe",
+    "akapity": [
+      "1. Regulamin może być zaktualizowany w każdym momencie przez Organizatorów po uzyskaniu zgody wszystkich drużynowych starszoharcerskich. Zmiany ogłaszane są na grupie na komunikatorze i na mapie Turnieju i obowiązują od chwili ogłoszenia — nie działają wstecz.",
+      "2. Sprawy nieujęte w regulaminie rozstrzygają Organizatorzy. Brak zapisu w regulaminie nie oznacza automatycznego prawa do punktów ani zgody na dane działanie.",
+      "3. Ostateczna interpretacja regulaminu należy do Organizatorów.",
+      "4. Przekazując dokumentację osiągnięć, zastęp wyraża zgodę na jej wykorzystanie na potrzeby prowadzenia Turnieju (m.in. mapa Turnieju), zgodnie z obowiązującymi w ZHP zasadami ochrony wizerunku.",
+      "5. Wszelkie pytania i wątpliwości należy kierować w pierwszej kolejności do swojej drużynowej, a następnie do komendantki Turnieju — pwd. Marii Wiwatowskiej."
     ]
   }
 ]

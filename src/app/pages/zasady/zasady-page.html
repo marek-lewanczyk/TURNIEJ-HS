@@ -14,7 +14,7 @@
   <section class="mt-10 max-w-2xl">
     <h3 class="font-naglowek text-lg">{{ sekcja.naglowek }}</h3>
     @for (akapit of sekcja.akapity; track $index) {
-      <p class="mt-3 text-sm leading-relaxed">{{ akapit }}</p>
+      <p class="mt-3 text-sm leading-relaxed" [class.pl-5]="czyPodpunkt(akapit)">{{ akapit }}</p>
     }
   </section>
 }

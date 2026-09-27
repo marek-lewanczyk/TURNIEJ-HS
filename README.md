@@ -3,7 +3,7 @@
 Tablica wyników turnieju organizowanego przez Namiestnictwo Starszoharcerskie
 Hufca ZHP Gdynia, od 19 września 2026 do 20 czerwca 2027.
 
-Strona jest statyczna. Nie ma panelu administracyjnego — wszystkie dane to siedem
+Strona jest statyczna. Nie ma panelu administracyjnego — wszystkie dane to osiem
 plików JSON w `src/data/`, a publikacja odbywa się przez push na `main`.
 
 ## Spis treści
@@ -17,6 +17,7 @@ plików JSON w `src/data/`, a publikacja odbywa się przez push na `main`.
 | [Dodać zadanie do bazy](#dodać-zadanie-do-bazy) | `zadania.json` | Zadania |
 | [Dodać inspirację](#dodać-inspirację) | `inspiracje.json` | Inspiracje |
 | [Zmienić zasady](#zmienić-zasady) | `zasady.json` | Zasady |
+| [Dodać materiał do pobrania](#dodać-materiał-do-pobrania) | `materialy.json` + `public/materialy/` | Materiały |
 | [Zmienić nazwę, daty albo kwartały](#zmienić-nazwę-daty-albo-kwartały) | `turniej.json` | cała strona |
 
 ## Zanim zaczniesz — trzy rzeczy o JSON
@@ -50,8 +51,8 @@ Plik: `src/data/punkty.json`. Dodaj obiekt na końcu tablicy:
 
 ```json
 {
-  "id": "2026-10-12-aptus-biwak",
-  "data": "2026-10-12",
+  "id": "2026-12-19-aptus-biwak",
+  "data": "2026-12-19",
   "zastepId": "aptus",
   "tytul": "Biwak zastępu w Kolibkach",
   "opis": "Dwa dni, własna kuchnia, gra nocna.",
@@ -64,9 +65,13 @@ Plik: `src/data/punkty.json`. Dodaj obiekt na końcu tablicy:
 Wszystkie pola poza `opis` i `ekstra` są wymagane.
 
 - `id` — dowolny, byle unikalny i niepusty. Wygodna konwencja: `data-zastęp-skrót`.
-- `data` — data przyznania punktów, format ISO `RRRR-MM-DD` (np. `2026-10-12`),
+- `data` — data przyznania punktów, format ISO `RRRR-MM-DD` (np. `2026-12-19`),
   w obrębie trwania turnieju: od `2026-09-19` do `2027-06-20` włącznie.
   Walidator odrzuca też daty, których nie ma w kalendarzu, np. `2026-02-30`.
+  Według regulaminu (§5 ust. 1) punkty przyznaje się tylko na spotkaniach
+  punktacyjnych, więc wpisuj datę spotkania: nocka `2026-12-19`, RTL
+  `2027-03-19`–`2027-03-21`, zlot `2027-06-18`–`2027-06-20`. Kwartały w
+  `turniej.json` są tak ustawione, żeby każde spotkanie wpadało do swojego kwartału.
 - `zastepId` — musi istnieć w `zastepy.json`. Uwaga: to `id` zastępu, nie jego
   nazwa — `aptus`, nie `Aptus`.
 - `tytul` — krótki tytuł osiągnięcia, niepusty. Pokazuje się w rozwinięciu wiersza.
@@ -99,7 +104,8 @@ Plik: `src/data/zastepy.json`. Dodaj obiekt do tablicy:
   `atrament-slaby`, `warstwica`, `papier`, `papier-cien`.
   W praktyce sensowne są cztery pierwsze — `papier`, `papier-cien` i `warstwica`
   są prawie niewidoczne na tle strony.
-- `dolaczyl` — data ISO wejścia do turnieju. Jeśli zastęp gra od początku, wpisz
+- `dolaczyl` — data ISO wejścia do turnieju. Regulamin (§3 ust. 6) pozwala dołączyć
+  z początkiem najbliższego kwartału, więc wpisz dzień startu kwartału. Jeśli zastęp gra od początku, wpisz
   `2026-09-19` — to jedyna wartość, przy której strona nie dopisuje informacji
   o dołączeniu w trakcie.
 
@@ -114,13 +120,17 @@ Plik: `src/data/turniej.json`. Miesiące siedzą **wewnątrz kwartałów**, w po
 `miesiace`. Znajdź właściwy i zamień `null` na treść:
 
 ```json
-{ "iso": "2026-10", "nazwa": "październik", "list": "O odwadze", "punktPrawa": "Punkt 3" }
+{ "iso": "2026-10", "nazwa": "październik", "list": "O odwadze", "punktPrawa": "Punkt 3",
+  "listPlik": "materialy/listy/2026-10-punkt-3.pdf" }
 ```
 
 - `iso` i `nazwa` — już są, nie ruszaj.
 - `list` — temat listu z tego miesiąca. `null` dopóki nieogłoszony.
 - `punktPrawa` — punkt Prawa Harcerskiego przypisany do tego miesiąca. `null`
   dopóki nieogłoszony.
+- `listPlik` — pomiń, jeśli list nie ma pliku. W przeciwnym razie wrzuć PDF do
+  `public/materialy/listy/` i wpisz ścieżkę **bez** ukośnika na początku, np.
+  `materialy/listy/2026-10-punkt-3.pdf`. Przy miesiącu pojawi się link „Czytaj list (PDF)”.
 
 Dopóki wartość jest `null`, zakładka Zadania pokazuje przy tym miesiącu „jeszcze
 nieogłoszony". To normalny stan, nie błąd — możesz ogłaszać listy pojedynczo, w
@@ -238,6 +248,33 @@ czytania regulaminu.
 
 ---
 
+## Dodać materiał do pobrania
+
+Dwa kroki. Najpierw wrzuć plik do `public/materialy/` — nazwa bez spacji i
+polskich znaków, np. `karta-tropu.pdf`. Potem dopisz obiekt do
+`src/data/materialy.json`:
+
+```json
+{
+  "id": "karta-tropu",
+  "tytul": "Karta tropu starszoharcerskiego",
+  "opis": "Do zaplanowania tropu: cel, zadania, terminy i ocena.",
+  "plik": "materialy/karta-tropu.pdf",
+  "format": "PDF"
+}
+```
+
+- `id` — unikalny. Materiał o `id` równym `regulamin` jest dodatkowo podlinkowany
+  na zakładce Zasady („Pobierz regulamin”).
+- `plik` — ścieżka **bez** `/` na początku. Strona działa pod adresem
+  `/TURNIEJ-HS/`, a ścieżka z ukośnikiem prowadziłaby poza nią — walidator to odrzuci.
+- `format` — krótka etykieta przy linku (`PDF`, `DOCX`).
+- `opis` — opcjonalny.
+
+Materiały wyświetlają się w kolejności z pliku.
+
+---
+
 ## Zmienić nazwę, daty albo kwartały
 
 Plik: `src/data/turniej.json`. Tu siedzi szkielet całego turnieju:
@@ -261,8 +298,11 @@ w stopce.
 Kwartały napędzają filtr okresu w rankingu. Każdy ma `id`, `nazwa`, `start`,
 `koniec` (obie daty włącznie) i tablicę `miesiace`.
 
-**Podział kwartałów w pliku to założenie przyjęte przy budowie strony, nie
-decyzja namiestnictwa** — jeśli organizatorzy ustalili inne granice, popraw je tutaj.
+Granice kwartałów wynikają z regulaminu (§4 ust. 1) i spotkań punktacyjnych:
+I `2026-09-19`–`2026-12-19` (z nocką 18/19.12), II `2026-12-20`–`2027-03-21`
+(z RTL-em), III `2027-03-22`–`2027-06-20` (ze zlotem). W regulaminie daty graniczne
+się nakładają, a walidator na to nie pozwala, dlatego każda granica przypada
+po spotkaniu punktacyjnym.
 
 Walidator pilnuje trzech rzeczy i zatrzyma deploy, jeśli któraś nie zagra:
 
@@ -299,11 +339,16 @@ i strona zostaje na poprzedniej wersji.
 - `turniej.json` — poprawność wszystkich dat, brak zachodzenia i szczelne
   pokrycie kwartałów.
 - `nagrody.json` — `miejsce` w zbiorze 1–3, bez duplikatów.
+- `materialy.json` — obecność i unikalność `id`, obecność `tytul` i `plik`,
+  brak `/` na początku `plik`.
 
 **Nie sprawdza** — a warto przejrzeć samemu po edycji:
 
 - `inspiracje.json`, `zadania.json`, `zasady.json` — żadnego pola. Pusty `tytul`
   albo brakujący `opis` przejdzie i wyrenderuje pusty kafel na stronie.
+- Istnienie plików — ani `plik` w materiałach, ani `listPlik` nie są sprawdzane
+  pod kątem tego, czy plik naprawdę leży w `public/`. Literówka w nazwie da
+  zepsuty link; po dodaniu pliku kliknij go raz na `npm start`.
 - `miesiace` w kwartałach — `iso` i `nazwa` nie są weryfikowane; miesiąc z błędnym
   `iso` po prostu nie złapie żadnych wpisów w filtrze.
 - Sens treści. Literówka w tytule to nadal literówka.

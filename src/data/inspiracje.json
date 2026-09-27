@@ -29,6 +29,19 @@
     ]
   },
   {
+    "id": "przyklady-tropow",
+    "nazwa": "Przykładowe tropy",
+    "inspiracje": [
+      { "tytul": "Inicjatywa", "opis": "Czas Bohaterów, Moje wsparcie się liczy, Zmień swoje otoczenie." },
+      { "tytul": "Zaradność", "opis": "Harcerski punkt wymiany, Mały papier o dużej wartości – banknot, Minizakład produkcyjny – akcja zarobkowa, Puszka szczęścia, Ścieżki życia, Waluty świata." },
+      { "tytul": "Odkrywanie", "opis": "Magia nauki, Nauka uczenia się, Naukowy zawrót głowy." },
+      { "tytul": "Braterstwo", "opis": "Każdy inny, a jednak taki sam, Świat z perspektywy niepełnosprawnych, Zero hejtu." },
+      { "tytul": "Ojczyzna", "opis": "Lokalny przewodnik po Małej Ojczyźnie, Piękne polskie miasta." },
+      { "tytul": "Człowiek", "opis": "Piknik o harcerskim zdrowym stylu życia, Przez żołądek do zdrowia, Skrzydlaty umysł, Sportowy przegląd, Trop dobrze być sobą (dwie wersje), Zielnik harcerski." },
+      { "tytul": "Natura", "opis": "Drzewo życzeń, Przyjaciel ptaków, Zaopiekuj się mną, Zielony raj." }
+    ]
+  },
+  {
     "id": "sluzba",
     "nazwa": "Służba",
     "inspiracje": [

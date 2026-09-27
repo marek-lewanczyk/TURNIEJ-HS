@@ -39,6 +39,7 @@ const DANE_TESTOWE: DaneTurnieju = {
   zadania: [],
   zasady: [],
   nagrody: [],
+  materialy: [],
 };
 
 function utworz() {

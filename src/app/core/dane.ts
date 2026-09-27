@@ -5,6 +5,7 @@ import inspiracjeJson from '../../data/inspiracje.json';
 import zadaniaJson from '../../data/zadania.json';
 import zasadyJson from '../../data/zasady.json';
 import nagrodyJson from '../../data/nagrody.json';
+import materialyJson from '../../data/materialy.json';
 
 import type { DaneTurnieju } from './model/turniej.model';
 
@@ -21,4 +22,5 @@ export const DANE: DaneTurnieju = {
   zadania: zadaniaJson,
   zasady: zasadyJson,
   nagrody: nagrodyJson,
+  materialy: materialyJson,
 } as DaneTurnieju;

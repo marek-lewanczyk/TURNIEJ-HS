@@ -30,6 +30,7 @@ const DANE_TESTOWE: DaneTurnieju = {
   zadania: [{ id: 'z1', tytul: 'Mapa terenu', opis: 'Narysujcie mapę.' }],
   zasady: [],
   nagrody: [],
+  materialy: [],
 };
 
 function utworz(dzis: string) {

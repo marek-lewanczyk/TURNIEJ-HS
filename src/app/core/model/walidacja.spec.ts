@@ -37,6 +37,7 @@ function bazoweDane(): DaneTurnieju {
     zadania: [],
     zasady: [],
     nagrody: [],
+    materialy: [],
   };
 }
 
@@ -276,5 +277,46 @@ describe('waliduj', () => {
     (dane.turniej.kwartaly[0] as { koniec?: string }).koniec = undefined;
     expect(() => waliduj(dane)).not.toThrow();
     expect(waliduj(dane)).toContain('kwartał q1: nieprawidłowa data końca "undefined"');
+  });
+
+  describe('materials', () => {
+    function zMaterialem(material: Record<string, unknown>): DaneTurnieju {
+      const dane = bazoweDane();
+      dane.materialy = [material as unknown as DaneTurnieju['materialy'][number]];
+      return dane;
+    }
+
+    it('accepts a well-formed material', () => {
+      expect(
+        waliduj(zMaterialem({ id: 'regulamin', tytul: 'Regulamin', plik: 'materialy/r.pdf', format: 'PDF' })),
+      ).toEqual([]);
+    });
+
+    it('rejects a material without a title', () => {
+      expect(waliduj(zMaterialem({ id: 'm1', tytul: ' ', plik: 'materialy/r.pdf', format: 'PDF' }))).toContain(
+        'materiał m1: brak wymaganego pola "tytul"',
+      );
+    });
+
+    it('rejects a material without a file', () => {
+      expect(waliduj(zMaterialem({ id: 'm1', tytul: 'Regulamin', format: 'PDF' }))).toContain(
+        'materiał m1: brak wymaganego pola "plik"',
+      );
+    });
+
+    it('rejects a material file path with a leading slash', () => {
+      expect(
+        waliduj(zMaterialem({ id: 'm1', tytul: 'Regulamin', plik: '/materialy/r.pdf', format: 'PDF' })),
+      ).toContain('materiał m1: ścieżka "plik" nie może zaczynać się od "/"');
+    });
+
+    it('rejects duplicated material ids', () => {
+      const dane = bazoweDane();
+      dane.materialy = [
+        { id: 'm1', tytul: 'A', plik: 'materialy/a.pdf', format: 'PDF' },
+        { id: 'm1', tytul: 'B', plik: 'materialy/b.pdf', format: 'PDF' },
+      ];
+      expect(waliduj(dane)).toContain('materiał m1: zduplikowane id');
+    });
   });
 });

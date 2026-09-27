@@ -43,7 +43,7 @@ function niepusty(wartosc: unknown): wartosc is string {
  */
 export function waliduj(dane: DaneTurnieju): string[] {
   const bledy: string[] = [];
-  const { turniej, zastepy, wpisy, nagrody } = dane;
+  const { turniej, zastepy, wpisy, nagrody, materialy } = dane;
 
   const idZastepow = new Set<string>();
   for (const zastep of zastepy) {
@@ -186,6 +186,31 @@ export function waliduj(dane: DaneTurnieju): string[] {
       bledy.push(`nagroda: zduplikowane miejsce ${nagroda.miejsce}`);
     }
     miejsca.add(nagroda.miejsce);
+  }
+
+  const idMaterialow = new Set<string>();
+  for (const material of materialy) {
+    const etykieta = niepusty(material.id) ? material.id : '(brak id)';
+
+    if (!niepusty(material.id)) {
+      bledy.push(`materiał ${etykieta}: brak wymaganego pola "id"`);
+    } else {
+      if (idMaterialow.has(material.id)) {
+        bledy.push(`materiał ${material.id}: zduplikowane id`);
+      }
+      idMaterialow.add(material.id);
+    }
+
+    if (!niepusty(material.tytul)) {
+      bledy.push(`materiał ${etykieta}: brak wymaganego pola "tytul"`);
+    }
+
+    if (!niepusty(material.plik)) {
+      bledy.push(`materiał ${etykieta}: brak wymaganego pola "plik"`);
+    } else if (material.plik.startsWith('/')) {
+      // An absolute path ignores the deploy's base href and 404s on GitHub Pages.
+      bledy.push(`materiał ${etykieta}: ścieżka "plik" nie może zaczynać się od "/"`);
+    }
   }
 
   return bledy;

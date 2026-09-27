@@ -33,6 +33,9 @@ export interface MiesiacTurnieju {
   nazwa: string;
   list: string | null;
   punktPrawa: string | null;
+  /** Relative path to the letter's file under `public/`, e.g. `materialy/listy/2026-09-punkt-1.pdf`.
+   *  Omitted or null until the letter is published as a file. */
+  listPlik?: string | null;
 }
 
 export interface Kwartal {
@@ -127,6 +130,17 @@ export interface SekcjaZasad {
   akapity: string[];
 }
 
+/** Downloadable document listed on the Materiały page. */
+export interface Material {
+  id: string;
+  tytul: string;
+  opis?: string;
+  /** Relative path to the file under `public/` (no leading slash — the site runs under a base href). */
+  plik: string;
+  /** Short label shown next to the link, e.g. `PDF`. */
+  format: string;
+}
+
 export interface DaneTurnieju {
   turniej: Turniej;
   zastepy: Zastep[];
@@ -135,4 +149,5 @@ export interface DaneTurnieju {
   zadania: Zadanie[];
   zasady: SekcjaZasad[];
   nagrody: Nagroda[];
+  materialy: Material[];
 }

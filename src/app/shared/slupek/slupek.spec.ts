@@ -18,6 +18,7 @@ const DANE_TESTOWE: DaneTurnieju = {
   zadania: [],
   zasady: [],
   nagrody: [],
+  materialy: [],
 };
 
 const POZYCJA: PozycjaRankingu = {

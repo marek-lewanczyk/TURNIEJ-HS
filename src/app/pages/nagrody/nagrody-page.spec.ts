@@ -12,6 +12,7 @@ const PUSTE: DaneTurnieju = {
   zadania: [],
   zasady: [],
   nagrody: [],
+  materialy: [],
 };
 
 function utworz(nagrody: Nagroda[]) {

@@ -45,6 +45,7 @@ const TURNIEJ_TESTOWY: DaneTurnieju = {
   zadania: [],
   zasady: [],
   nagrody: [],
+  materialy: [],
 };
 
 function wpis(id: string, data: string, zastepId: string, punkty: number): Wpis {

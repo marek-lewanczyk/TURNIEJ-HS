@@ -3,6 +3,7 @@ import { DANE } from './dane';
 import { TERAZ } from './teraz';
 import type {
   DaneTurnieju,
+  Material,
   MiesiacTurnieju,
   Wpis,
   Zastep,
@@ -40,6 +41,12 @@ export class TurniejStore {
   readonly zadania = signal(this.dane.zadania).asReadonly();
   readonly zasady = signal(this.dane.zasady).asReadonly();
   readonly nagrody = signal(this.dane.nagrody).asReadonly();
+  readonly materialy = signal(this.dane.materialy).asReadonly();
+
+  /** The regulations document, linked from the Zasady page. Found by its fixed id. */
+  readonly regulamin = computed<Material | null>(
+    () => this.materialy().find((material) => material.id === 'regulamin') ?? null,
+  );
 
   private readonly okresWewnetrzny = signal<OkresFiltru>({ rodzaj: 'caly' });
   readonly okres = this.okresWewnetrzny.asReadonly();
